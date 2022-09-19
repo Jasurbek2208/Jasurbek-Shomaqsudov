@@ -1,0 +1,43 @@
+.icon {
+  cursor: pointer;
+  display: inline-block;
+  min-width: 24px;
+  min-height: 24px;
+  background-color: #000;
+  mask-repeat: no-repeat;
+  -webkit-mask-repeat: no-repeat;
+  mask-size: contain;
+  -webkit-mask-size: contain;
+  mask-position: center;
+  -webkit-mask-position: center;
+}
+
+.icon.tests {
+  mask-image: url("../icon/tests.svg");
+  -webkit-mask-image: url("../icon/tests.svg");
+}
+
+.icon.achievments {
+  mask-image: url("../icon/achievments.svg");
+  -webkit-mask-image: url("../icon/achievments.svg");
+}
+
+.icon.friends {
+  mask-image: url("../icon/friends.svg");
+  -webkit-mask-image: url("../icon/friends.svg");
+}
+
+.icon.payment {
+  mask-image: url("../icon/payment.svg");
+  -webkit-mask-image: url("../icon/payment.svg");
+}
+
+.icon.settings {
+  mask-image: url("../icon/settings.svg");
+  -webkit-mask-image: url("../icon/settings.svg");
+}
+
+.icon.logOut {
+  mask-image: url("../icon/logOut.svg");
+  -webkit-mask-image: url("../icon/logOut.svg");
+}
