@@ -63,6 +63,33 @@ export default function MainNavbar() {
                 <span className="right"></span>
               </Link>
             </li>
+            <li>
+              <Link
+                to={"/adminPage"}
+                className={location === "/adminPage" ? "On" : ""}
+              >
+                Admin Page
+                <span className="right"></span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={"/login"}
+                className={location === "/login" ? "On" : ""}
+              >
+                Login
+                <span className="right"></span>
+              </Link>
+            </li>
+            <li>
+              <Link
+                to={"/register"}
+                className={location === "/register" ? "On" : ""}
+              >
+                Register
+                <span className="right"></span>
+              </Link>
+            </li>
           </ul>
         </div>
       </div>
