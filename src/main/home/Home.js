@@ -362,8 +362,9 @@ const StyledHome = styled.div`
         gap: 30px;
 
         .blog_wrapper {
+          position: relative;
           width: 300px;
-          height: 36 0px;
+          height: 380px;
           border-radius: 12px;
           /* border: 2px solid #000; */
           background-color: #fff;
@@ -384,6 +385,9 @@ const StyledHome = styled.div`
 
           .bottom {
             padding: 12px 14px;
+            position: relative;
+            width: 100%;
+            height: 180px;
 
             h2 {
               font-size: 20px;
@@ -400,6 +404,9 @@ const StyledHome = styled.div`
 
             .link {
               padding: 12px 0px;
+              position: absolute;
+              bottom: 0px;
+              width: 100%;
               display: flex;
               justify-content: space-between;
 
@@ -414,21 +421,19 @@ const StyledHome = styled.div`
               }
 
               .icon-wrapper {
-                position: relative;
-
                 .icon-like,
                 span {
-                  cursor: pointer;
                   position: absolute;
-                  top: 2px;
-                  right: 0px;
+                  top: 10px;
+                  right: 25px;
+                  cursor: pointer;
                   transform: translateX(-50%);
                 }
 
                 span {
                   cursor: default;
-                  top: 0px;
-                  right: 30px;
+                  top: 8px;
+                  right: 54px;
                 }
               }
             }
