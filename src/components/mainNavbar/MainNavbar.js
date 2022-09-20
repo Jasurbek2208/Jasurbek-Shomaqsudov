@@ -15,9 +15,9 @@ export default function MainNavbar() {
       <div className="navbar__wrapper">
         <div className="container">
           <h1>
-            <Link onClick={CloseNav} to={"/home"}>
+            <a onClick={CloseNav} href="/home#">
               Portfolio
-            </Link>
+            </a>
           </h1>
           <div
             className={(menuToggle ? "On " : "") + "menu-btn"}
@@ -203,6 +203,7 @@ const StyledNavbar = styled.nav`
             position: relative;
             padding: 5px 10px;
             color: #dddddd;
+            margin-left: -20px;
             font-weight: 600;
             font-size: 28px;
             text-decoration: none;

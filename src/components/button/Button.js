@@ -10,29 +10,38 @@ export default function Button({
   onclick,
 }) {
   return (
-    <a href={link}>
-      <StyledButton type={type} portfolio={portfolio} onClick={onclick}>
+    <StyledButton href={link}>
+      <button type={type} portfolio={portfolio} onClick={onclick}>
         {content}
-      </StyledButton>
-    </a>
+      </button>
+    </StyledButton>
   );
 }
 
-const StyledButton = styled.button`
+const StyledButton = styled.a`
   cursor: pointer;
   padding: 12px 20px;
   border: 1px solid #fff;
-  background-color: #fff0;
-  color: #fff;
-  font-size: 16px;
-  text-decoration: none;
-  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   transition: 0.3s;
+
+  button {
+    width: 100%;
+    height: 100%;
+    color: #fff;
+    font-size: 16px;
+    text-decoration: none;
+    background-color: #fff0;
+    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+    border: none;
+  }
 
   &:hover {
     background-color: #fcfcfc;
     transform: scale(110%);
-    color: #1381ff;
+
+    button {
+      color: #1381ff;
+    }
   }
 
   &:active {

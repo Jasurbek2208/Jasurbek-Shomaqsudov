@@ -4,7 +4,7 @@ import styled from "styled-components";
 import Button from "../../components/button/Button";
 import Glass from "../../components/Glass/Glass";
 import { db } from "../../firebase";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import MainFooter from "../../components/mainFooter/MainFooter";
 
 export default function Home() {
   const [isScroll, setIsScroll] = useState("Off");
@@ -205,6 +205,9 @@ export default function Home() {
           </main>
         </div>
       </section>
+
+      {/* FOOTER */}
+      <MainFooter />
     </StyledHome>
   );
 }
