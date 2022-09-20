@@ -7,6 +7,7 @@ import { addDoc, collection } from "firebase/firestore";
 import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../firebase";
 import { db } from "../../firebase";
+import { v4 } from "uuid";
 
 export default function AddPage({ open, setOpen }) {
   const {
@@ -64,6 +65,10 @@ export default function AddPage({ open, setOpen }) {
     console.log(data);
     setLoading(true);
     data.img = img;
+    data.like = 0;
+    data.id = v4();
+    data.description = "";
+
     try {
       await addDoc(collection(db, "portfolio"), data);
     } catch (e) {

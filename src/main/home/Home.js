@@ -35,13 +35,13 @@ export default function Home() {
 
   async function clickForLike(e) {
     let upDateData = null;
-    let currentLike = 0;
+    let currentLike = false;
     let id = "";
     let num = 0;
     if (e.target.classList.contains("fa-regular")) {
       e.target.classList.remove("fa-regular");
       e.target.classList.add("fa-solid");
-      currentLike = 1;
+      currentLike = true;
     } else {
       e.target.classList.remove("fa-solid");
       e.target.classList.add("fa-regular");
