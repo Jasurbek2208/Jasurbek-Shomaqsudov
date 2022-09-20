@@ -8,6 +8,7 @@ import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { storage } from "../../firebase";
 import { db } from "../../firebase";
 import { v4 } from "uuid";
+import Loading from "../loading/Loading";
 
 export default function AddPage({ open, setOpen }) {
   const {
@@ -86,7 +87,7 @@ export default function AddPage({ open, setOpen }) {
         <form onSubmit={handleSubmit(onSubmit)} className="form-wrapper">
           <div className="inputs__wrapper">
             <div>
-              <p>Project Title</p>
+              <p>Project Title*</p>
               <input
                 className={errors.title ? "On" : ""}
                 {...register("title", { required: true })}
@@ -96,7 +97,16 @@ export default function AddPage({ open, setOpen }) {
               {errors.title && <span>Title yozmadingiz !</span>}
             </div>
             <div>
-              <p>Project Technologies</p>
+              <p>Project Description*</p>
+              <input
+                className={errors.description ? "On" : ""}
+                {...register("description")}
+                type="text"
+                placeholder="description"
+              />
+            </div>
+            <div>
+              <p>Project Technologies*</p>
               <input
                 className={errors.technologies ? "On" : ""}
                 {...register("technologies", { required: true })}
@@ -106,7 +116,7 @@ export default function AddPage({ open, setOpen }) {
               {errors.technologies && <span>Technologies yozilmadi !</span>}
             </div>
             <div>
-              <p>Project Link</p>
+              <p>Project Link*</p>
               <input
                 className={errors.link ? "On" : ""}
                 {...register("link", { required: true })}
@@ -116,13 +126,18 @@ export default function AddPage({ open, setOpen }) {
               {errors.link && <span>Project linki yozilmadi !</span>}
             </div>
             <div>
-              <p>Project Image</p>
+              <p>Project Image*</p>
+              <div className="img__wrapper">
+                {loading ? <Loading /> : null}
+                <img src={img ? img : ""} alt="Project Image not found" />
+              </div>
               <input
                 className={errors.img ? "On" : ""}
                 {...register("img", { required: true })}
                 type="file"
                 placeholder="project image"
                 onChange={setWallpaper}
+                disabled={imgLoading}
               />
               {errors.img && <span>Rasm yuklamadingiz !</span>}
               {error ? (
@@ -143,31 +158,7 @@ export default function AddPage({ open, setOpen }) {
             </button>
           </div>
         </form>
-        {loading ? (
-          <div
-            style={{
-              position: "fixed",
-              top: "0px",
-              left: "0px",
-              width: "100%",
-              height: "100%",
-              backgroundColor: "#ccc7",
-            }}
-          >
-            <div
-              class="spinner-border"
-              role="status"
-              style={{
-                position: "fixed",
-                top: "50%",
-                left: "50%",
-                scale: "200%",
-              }}
-            >
-              <span class="sr-only"></span>
-            </div>
-          </div>
-        ) : null}
+        {loading ? <Loading /> : null}
       </div>
     </StyledAddPage>
   );
@@ -178,7 +169,7 @@ const StyledAddPage = styled.div`
   position: absolute;
   top: -2000px;
   left: 0px;
-  width: 100vw;
+  width: 100%;
   height: max-content;
   background-color: #ececec;
   transition: 0.5s;
@@ -202,10 +193,31 @@ const StyledAddPage = styled.div`
         display: flex;
         justify-content: center;
         flex-wrap: wrap;
-        gap: 50px;
+        gap: 60px;
 
         div {
           position: relative;
+
+          p {
+            margin: 0;
+            margin-bottom: 10px;
+            font-weight: 600;
+          }
+
+          .img__wrapper {
+            margin-bottom: 22px;
+            width: 300px;
+            height: 200px;
+            border: 1px solid #0068c4;
+            border-radius: 12px;
+            box-shadow: 8px 6px 8px 2px #ccc;
+
+            img {
+              width: 100%;
+              height: 100%;
+              border-radius: 12px;
+            }
+          }
 
           input {
             padding: 10px 14px;

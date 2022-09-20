@@ -35,7 +35,7 @@ export default function MainNavbar() {
             <li>
               <a
                 onClick={CloseNav}
-                href={"#header"}
+                href={"home#header"}
                 className={location.hash === "#header" ? "On" : ""}
               >
                 Home
@@ -45,7 +45,7 @@ export default function MainNavbar() {
             <li>
               <a
                 onClick={CloseNav}
-                href={"#aboutMe"}
+                href={"home#aboutMe"}
                 className={location.hash === "#aboutMe" ? "On" : ""}
               >
                 About
@@ -55,7 +55,7 @@ export default function MainNavbar() {
             <li>
               <a
                 onClick={CloseNav}
-                href={"#myPortfolio"}
+                href={"home#myPortfolio"}
                 className={location === "#myPortfolio" ? "On" : ""}
               >
                 Portfolio
