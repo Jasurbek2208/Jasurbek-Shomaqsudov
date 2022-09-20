@@ -37,7 +37,6 @@ export default function Home() {
     let upDateData = null;
     let currentLike = false;
     let id = "";
-    let num = 0;
     if (e.target.classList.contains("fa-regular")) {
       e.target.classList.remove("fa-regular");
       e.target.classList.add("fa-solid");
@@ -63,16 +62,20 @@ export default function Home() {
       let rowList = [];
       Object.entries(upDateData).forEach((i) => {
         let tempObj = {};
-        tempObj[i[0]] = i[1].stringValue;
+        i[0] === "like"
+          ? (tempObj[i[0]] = i[1].integerValue)
+          : (tempObj[i[0]] = i[1].stringValue);
         rowList.push(tempObj);
       });
       rowList.forEach((i) => {
         Object.entries(i).forEach((j) => {
           let jKey = j[0];
           let jValue = j[1];
+          console.log(j);
           upDateData = { ...upDateData, [jKey]: jValue };
         });
       });
+      let num = upDateData.like;
       upDateData.like = currentLike
         ? Number(++num)
         : num !== 0
