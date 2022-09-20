@@ -5,14 +5,19 @@ import styled from "styled-components";
 export default function MainNavbar() {
   const [menuToggle, setMenuToggle] = useState(false);
   const location = useLocation();
-  console.log(location);
+
+  function CloseNav() {
+    setMenuToggle(false);
+  }
 
   return (
     <StyledNavbar>
       <div className="navbar__wrapper">
         <div className="container">
           <h1>
-            <Link to={"/main"}>Portfolio</Link>
+            <Link onClick={CloseNav} to={"/home"}>
+              Portfolio
+            </Link>
           </h1>
           <div
             className={(menuToggle ? "On " : "") + "menu-btn"}
@@ -29,6 +34,7 @@ export default function MainNavbar() {
           <ul>
             <li>
               <a
+                onClick={CloseNav}
                 href={"#header"}
                 className={location.hash === "#header" ? "On" : ""}
               >
@@ -38,6 +44,7 @@ export default function MainNavbar() {
             </li>
             <li>
               <a
+                onClick={CloseNav}
                 href={"#aboutMe"}
                 className={location.hash === "#aboutMe" ? "On" : ""}
               >
@@ -46,16 +53,18 @@ export default function MainNavbar() {
               </a>
             </li>
             <li>
-              <Link
-                to={"/portfolio"}
-                className={location === "/portfolio" ? "On" : ""}
+              <a
+                onClick={CloseNav}
+                href={"#myPortfolio"}
+                className={location === "#myPortfolio" ? "On" : ""}
               >
                 Portfolio
                 <span className="left"></span>
-              </Link>
+              </a>
             </li>
             <li>
               <Link
+                onClick={CloseNav}
                 to={"/contacts"}
                 className={location === "/contacts" ? "On" : ""}
               >
@@ -65,6 +74,7 @@ export default function MainNavbar() {
             </li>
             <li>
               <Link
+                onClick={CloseNav}
                 to={"/adminPage"}
                 className={location === "/adminPage" ? "On" : ""}
               >
@@ -74,6 +84,7 @@ export default function MainNavbar() {
             </li>
             <li>
               <Link
+                onClick={CloseNav}
                 to={"/login"}
                 className={location === "/login" ? "On" : ""}
               >
@@ -83,6 +94,7 @@ export default function MainNavbar() {
             </li>
             <li>
               <Link
+                onClick={CloseNav}
                 to={"/register"}
                 className={location === "/register" ? "On" : ""}
               >
@@ -164,13 +176,13 @@ const StyledNavbar = styled.nav`
   }
   .menu__wrappper {
     position: fixed;
-    top: -100vh;
+    top: -2500px;
     right: 0;
     width: 100%;
-    height: 100vh;
+    height: max-content;
     z-index: 1;
     background-color: #1f1f1f;
-    transition: 1s;
+    transition: 0.5s;
 
     &.On {
       top: 0;
@@ -178,7 +190,7 @@ const StyledNavbar = styled.nav`
 
     .container {
       ul {
-        margin-top: 150px;
+        margin-top: 130px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -189,12 +201,12 @@ const StyledNavbar = styled.nav`
         li {
           a {
             position: relative;
-            padding: 10px 10px;
+            padding: 5px 10px;
             color: #dddddd;
             font-weight: 600;
             font-size: 28px;
             text-decoration: none;
-            transition: 0.3s;
+            transition: 0.2s;
 
             span {
               position: absolute;

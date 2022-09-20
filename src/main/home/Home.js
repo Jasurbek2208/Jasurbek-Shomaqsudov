@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, doc, getDocs, setDoc } from "firebase/firestore";
 import styled from "styled-components";
 import Button from "../../components/button/Button";
 import Glass from "../../components/Glass/Glass";
 import { db } from "../../firebase";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Home() {
   const [isScroll, setIsScroll] = useState("Off");
@@ -32,15 +33,67 @@ export default function Home() {
     setData(list);
   }
 
+  async function clickForLike(e) {
+    let upDateData = null;
+    let currentLike = 0;
+    let id = "";
+    let num = 0;
+    if (e.target.classList.contains("fa-regular")) {
+      e.target.classList.remove("fa-regular");
+      e.target.classList.add("fa-solid");
+      currentLike = 1;
+    } else {
+      e.target.classList.remove("fa-solid");
+      e.target.classList.add("fa-regular");
+    }
+
+    try {
+      const querySnapshot = await getDocs(collection(db, "portfolio"));
+      querySnapshot.forEach((doc) => {
+        if (
+          doc._document.data.value.mapValue.fields.id.stringValue ===
+          e.target.id
+        ) {
+          upDateData = doc._document.data.value.mapValue.fields;
+          id = doc.id;
+        }
+      });
+      const docRef = doc(db, "portfolio", id);
+
+      let rowList = [];
+      Object.entries(upDateData).forEach((i) => {
+        let tempObj = {};
+        tempObj[i[0]] = i[1].stringValue;
+        rowList.push(tempObj);
+      });
+      rowList.forEach((i) => {
+        Object.entries(i).forEach((j) => {
+          let jKey = j[0];
+          let jValue = j[1];
+          upDateData = { ...upDateData, [jKey]: jValue };
+        });
+      });
+      upDateData.like = currentLike
+        ? Number(++num)
+        : num !== 0
+        ? Number(--num)
+        : Number(num);
+      await setDoc(docRef, upDateData);
+      getData();
+    } catch (e) {
+      console.error("Error adding document: ", e);
+    }
+  }
+
   useEffect(() => {
     getData();
   }, []);
 
   return (
-    <StyledHome>
+    <StyledHome id="header">
       <div className="container">
         {/* HEADER SECTION */}
-        <header className="header__wrapper" id="header">
+        <header className="header__wrapper">
           <main className="headerMain">
             <h1>Shomaqsudov Jasurbek</h1>
             <h3>Front-End Developer</h3>
@@ -51,11 +104,14 @@ export default function Home() {
               information on this site.
             </p>
             <div className="buttons__wrapper">
-              <a href="#aboutMe">
-                <Button type="button" content="About Me" />
-              </a>
-              <Button type="button" content="Portfolio" portfolio={true} />
-              <Button type="button" content="Contact Me" />
+              <Button type="button" content="About Me" link="#aboutMe" />
+              <Button
+                type="button"
+                content="Portfolio"
+                link="#myPortfolio"
+                portfolio={true}
+              />
+              <Button type="button" content="Contact Me" link="#contactMe" />
             </div>
           </main>
           <div className="image__wrapper">
@@ -107,24 +163,37 @@ export default function Home() {
       </section>
 
       {/* PORTFOLIO WRAPPER */}
-      <section className="portfolio__wrapper">
+      <section className="portfolio__wrapper" id="myPortfolio">
         <div className="container">
           <h1>Portfolio</h1>
           <main className="my-portfolios">
             {data?.map((i) => {
               return (
-                <div className="blog_wrapper">
+                <div key={i?.title?.stringValue} className="blog_wrapper">
                   <div className="top">
                     <img
-                      src={i.img?.stringValue}
-                      alt={i.title.stringValue + ".jpg"}
+                      src={i?.img?.stringValue}
+                      alt={i?.title?.stringValue + ".jpg"}
                     />
                   </div>
                   <div className="bottom">
-                    <h2>{i.title.stringValue}</h2>
-                    <h5>{i.technologies.stringValue}</h5>
+                    <h2>{i?.title?.stringValue}</h2>
+                    <h5>{i?.technologies?.stringValue}</h5>
+                    <p
+                      dangerouslySetInnerHTML={{
+                        __html: i?.description?.stringValue,
+                      }}
+                    ></p>
                     <div className="link">
-                      <a href={i.link.stringValue}>Link to Project</a>
+                      <a href={i?.link?.stringValue}>Link to Project</a>
+                      <div className="icon-wrapper">
+                        <span>{i?.like?.integerValue}</span>
+                        <i
+                          id={i?.id?.stringValue}
+                          onClick={clickForLike}
+                          className="icon icon-like fa-regular fa-thumbs-up"
+                        ></i>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -222,7 +291,7 @@ const StyledHome = styled.div`
 
   /* SKILLS WRAPPER */
   .skills__wrapper {
-    padding: 20px 0 180px;
+    padding: 20px 0 50px;
     background-color: #ececec;
 
     .container {
@@ -270,7 +339,7 @@ const StyledHome = styled.div`
   /* PORTFOLIO WRAPPER */
 
   .portfolio__wrapper {
-    padding: 0px 0px 200px;
+    padding: 130px 0px 200px;
     background-color: #ececec;
 
     .container {
@@ -328,6 +397,8 @@ const StyledHome = styled.div`
 
             .link {
               padding: 12px 0px;
+              display: flex;
+              justify-content: space-between;
 
               a {
                 font-size: 15px;
@@ -336,6 +407,25 @@ const StyledHome = styled.div`
 
                 &:hover {
                   color: blue;
+                }
+              }
+
+              .icon-wrapper {
+                position: relative;
+
+                .icon-like,
+                span {
+                  cursor: pointer;
+                  position: absolute;
+                  top: 2px;
+                  right: 0px;
+                  transform: translateX(-50%);
+                }
+
+                span {
+                  cursor: default;
+                  top: 0px;
+                  right: 30px;
                 }
               }
             }

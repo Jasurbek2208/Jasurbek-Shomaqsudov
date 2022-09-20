@@ -1,9 +1,9 @@
 .icon {
   cursor: pointer;
   display: inline-block;
-  min-width: 24px;
-  min-height: 24px;
-  background-color: #000;
+  min-width: 28px;
+  min-height: 28px;
+  color: #fff !important;
   mask-repeat: no-repeat;
   -webkit-mask-repeat: no-repeat;
   mask-size: contain;

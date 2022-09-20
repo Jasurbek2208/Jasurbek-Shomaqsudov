@@ -1,28 +1,38 @@
 import React from "react";
 import styled, { css } from "styled-components";
 
-export default function Button({ type, content, portfolio, onclick }) {
+export default function Button({
+  type,
+  content,
+  portfolio,
+  children,
+  link,
+  onclick,
+}) {
   return (
-    <StyledButton type={type} portfolio={portfolio} onClick={onclick}>
-      {content}
-    </StyledButton>
+    <a href={link}>
+      <StyledButton type={type} portfolio={portfolio} onClick={onclick}>
+        {content}
+      </StyledButton>
+    </a>
   );
 }
 
 const StyledButton = styled.button`
   cursor: pointer;
   padding: 12px 20px;
-  color: #fff;
-  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
-  font-size: 16px;
   border: 1px solid #fff;
   background-color: #fff0;
+  color: #fff;
+  font-size: 16px;
+  text-decoration: none;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
   transition: 0.3s;
 
   &:hover {
     background-color: #fcfcfc;
+    transform: scale(110%);
     color: #1381ff;
-    transform: scale(111%);
   }
 
   &:active {
@@ -31,9 +41,7 @@ const StyledButton = styled.button`
 
   ${({ portfolio }) => {
     if (portfolio) {
-      return css`
-        
-      `;
+      return css``;
     }
   }}
 
@@ -41,9 +49,9 @@ const StyledButton = styled.button`
     width: 90%;
     margin: 0 auto;
     padding: 20px 26px;
-    
-  &:hover {
-    transform: scale(105%);
-  }
+
+    &:hover {
+      transform: scale(105%);
+    }
   }
 `;
