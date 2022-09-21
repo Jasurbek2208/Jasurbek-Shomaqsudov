@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import AddPage from "../../components/addPage/AddPage";
+import Button from "../../components/button/Button";
 
 export default function AdminPage() {
   const [open, setOpen] = useState(false);
@@ -10,13 +11,12 @@ export default function AdminPage() {
       <div className="container">
         <h1>Admin Panel</h1>
         <div className="btn-wrapper">
-          <button
+          <Button
             className="add-btn"
             type="button"
             onClick={() => setOpen(true)}
-          >
-            Add Portfolio
-          </button>
+            content="Add Portfolio"
+          />
         </div>
       </div>
       <AddPage open={open} setOpen={setOpen} />

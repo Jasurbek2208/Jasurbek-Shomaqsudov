@@ -1,8 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import styled from "styled-components";
 
+// Context
+import { MyContext } from "../../context/Context";
+
 export default function MainNavbar() {
+  const { setDevMode, setDevEditMode } = useContext(MyContext);
   const [menuToggle, setMenuToggle] = useState(false);
   const location = useLocation();
 
@@ -88,19 +92,25 @@ export default function MainNavbar() {
                 to={"/login"}
                 className={location === "/login" ? "On" : ""}
               >
-                Login
+                Login or Register
                 <span className="right"></span>
               </Link>
             </li>
             <li>
-              <Link
-                onClick={CloseNav}
-                to={"/register"}
-                className={location === "/register" ? "On" : ""}
-              >
-                Register
-                <span className="right"></span>
-              </Link>
+              <label className="form-check-label" for="flexSwitchCheckDefault">
+                Developer mode
+              </label>
+              <div class="form-check form-switch">
+                <input
+                  onChange={() => {
+                    setDevMode((p) => !p);
+                    setDevEditMode(false);
+                  }}
+                  className="form-check-input"
+                  type="checkbox"
+                  id="flexSwitchCheckDefault"
+                />
+              </div>
             </li>
           </ul>
         </div>
@@ -112,7 +122,7 @@ export default function MainNavbar() {
 const StyledNavbar = styled.nav`
   .navbar__wrapper {
     position: fixed;
-    z-index: 2;
+    z-index: 3;
     width: 100%;
     padding: 18px 16px;
     background-color: #ececec;
@@ -179,8 +189,8 @@ const StyledNavbar = styled.nav`
     top: -2500px;
     right: 0;
     width: 100%;
-    height: max-content;
-    z-index: 1;
+    height: 100vh;
+    z-index: 2;
     background-color: #1f1f1f;
     transition: 0.5s;
 
@@ -190,22 +200,23 @@ const StyledNavbar = styled.nav`
 
     .container {
       ul {
-        margin-top: 130px;
+        margin-top: 150px;
         display: flex;
         align-items: center;
         justify-content: center;
         flex-direction: column;
-        gap: 48px;
+        gap: 42px;
         list-style: none;
 
         li {
-          a {
+          a,
+          label {
             position: relative;
-            padding: 5px 10px;
+            padding: 3px 10px;
             color: #dddddd;
             margin-left: -20px;
             font-weight: 600;
-            font-size: 28px;
+            font-size: 22px;
             text-decoration: none;
             transition: 0.2s;
 
@@ -215,7 +226,7 @@ const StyledNavbar = styled.nav`
               left: 0;
               right: 0;
               margin: 0 auto;
-              height: 4px;
+              height: 3px;
               width: 0px;
               background-color: #fff;
               transition: 1s;
@@ -235,6 +246,21 @@ const StyledNavbar = styled.nav`
               span {
                 width: 100%;
               }
+            }
+          }
+
+          &:last-of-type {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+
+            label {
+              cursor: pointer;
+              font-size: 18px;
+            }
+
+            input {
+              cursor: pointer;
             }
           }
         }

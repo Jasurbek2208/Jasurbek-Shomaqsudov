@@ -53,7 +53,7 @@ const StyledFooter = styled.footer`
       align-items: flex-start;
       justify-content: space-around;
       flex-wrap: wrap;
-      gap: 150px;
+      gap: 200px;
       row-gap: 60px;
 
       li {

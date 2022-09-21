@@ -14,6 +14,7 @@ export default function AddPage({ open, setOpen }) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors },
   } = useForm();
 
@@ -58,17 +59,14 @@ export default function AddPage({ open, setOpen }) {
       setError(true);
     } finally {
       setImgLoading(false);
-      console.log(error, img);
     }
   }
 
   async function onSubmit(data) {
-    console.log(data);
     setLoading(true);
     data.img = img;
     data.like = 0;
     data.id = v4();
-    data.description = "";
 
     try {
       await addDoc(collection(db, "portfolio"), data);
@@ -77,6 +75,8 @@ export default function AddPage({ open, setOpen }) {
     } finally {
       setLoading(false);
       setOpen(false);
+      reset();
+      setImg("");
     }
   }
 

@@ -3,16 +3,19 @@ import { BrowserRouter } from "react-router-dom";
 
 //
 import GlobalStyle from "./assets/style/Global";
-import "bootstrap/dist/css/bootstrap.css"
+import "bootstrap/dist/css/bootstrap.css";
 
 //
 import Router from "./router/Router";
+import Context from "./context/Context";
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <GlobalStyle />
-      <Router />
-    </BrowserRouter>
+    <Context>
+      <BrowserRouter>
+        <GlobalStyle />
+        <Router />
+      </BrowserRouter>
+    </Context>
   );
 }

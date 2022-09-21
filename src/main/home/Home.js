@@ -1,29 +1,23 @@
-import React, { useEffect, useState } from "react";
-import { collection, doc, getDocs, setDoc } from "firebase/firestore";
+import React, { useContext, useEffect, useState } from "react";
+import {
+  collection,
+  doc,
+  getDocs,
+  setDoc,
+  deleteDoc,
+} from "firebase/firestore";
 import styled from "styled-components";
 import Button from "../../components/button/Button";
 import Glass from "../../components/Glass/Glass";
 import { db } from "../../firebase";
 import MainFooter from "../../components/mainFooter/MainFooter";
+import { MyContext } from "../../context/Context";
 
 export default function Home() {
-  const [isScroll, setIsScroll] = useState("Off");
-
-  const body = document.body;
-  // body.style.background = "#1b1b1b";
-  body.style.background = "radial-gradient(#1381ff, #001f4e)";
-
-  // function onScrolled() {
-  //   window.scrollY === 322 ? setIsScroll("") : setIsScroll("Off");
-  //   console.log(window.scrollY);
-  // }
-
-  // queryAllByAttribute('onScroll={() => onScroll(window.scrollY)}', document.body)
-  // const body = document.body;
-  // body.scroll(window.scrollY === 322 ? setIsScroll("") : setIsScroll("Off"))
-
+  const { devMode, devEditMode, setDevEditMode } = useContext(MyContext);
   const [data, setData] = useState([]);
 
+  // GET DATA
   async function getData() {
     let list = [];
     const querySnapshot = await getDocs(collection(db, "portfolio"));
@@ -33,6 +27,7 @@ export default function Home() {
     setData(list);
   }
 
+  // CLICK LIKE
   async function clickForLike(e) {
     let upDateData = null;
     let currentLike = false;
@@ -88,41 +83,67 @@ export default function Home() {
     }
   }
 
+  const [checkedDataWatcher, setCheckedDataWatcher] = useState([]);
+  // DELETE DATA
+  async function deleteDoc() {
+    checkedDataWatcher.forEach((i) => {
+      deleteDoc(doc(db, "portfoio", i));
+    });
+    setCheckedDataWatcher([]);
+    getData();
+  }
+
+  function checkDataId(id) {
+    if (!checkedDataWatcher.includes(id)) {
+      setCheckedDataWatcher((p) => [...p, id]);
+    } else {
+      setCheckedDataWatcher(
+        checkedDataWatcher.filter((i) => (i !== id ? true : false))
+      );
+    }
+  }
+
   useEffect(() => {
     getData();
   }, []);
 
+  useEffect(() => {
+    if (setDevEditMode) setCheckedDataWatcher([]);
+  }, [devEditMode]);
+
   return (
     <StyledHome id="header">
-      <div className="container">
-        {/* HEADER SECTION */}
-        <header className="header__wrapper">
-          <main className="headerMain">
-            <h1>Shomaqsudov Jasurbek</h1>
-            <h3>Front-End Developer</h3>
-            <p>
-              My name is Jasurbek. And I'm The Front-End Developer. I have just
-              started my job and am currently gaining experience. Why should you
-              choose Me? You will learn more about this by reading the
-              information on this site.
-            </p>
-            <div className="buttons__wrapper">
-              <Button type="button" content="About Me" link="#aboutMe" />
-              <Button
-                type="button"
-                content="Portfolio"
-                link="#myPortfolio"
-                portfolio={true}
-              />
-              <Button type="button" content="Contact Me" link="#contactMe" />
+      <div className="headHeader">
+        <div className="container">
+          {/* HEADER SECTION */}
+          <header className="header__wrapper">
+            <main className="headerMain">
+              <h1>Shomaqsudov Jasurbek</h1>
+              <h3>Front-End Developer</h3>
+              <p>
+                My name is Jasurbek. And I'm The Front-End Developer. I have
+                just started my job and am currently gaining experience. Why
+                should you choose Me? You will learn more about this by reading
+                the information on this site.
+              </p>
+              <div className="buttons__wrapper">
+                <Button type="button" content="About Me" link="#aboutMe" />
+                <Button
+                  type="button"
+                  content="Portfolio"
+                  link="#myPortfolio"
+                  portfolio={true}
+                />
+                <Button type="button" content="Contact Me" link="#contactMe" />
+              </div>
+            </main>
+            <div className="image__wrapper">
+              <Glass>
+                <img src="" alt="person-img" />
+              </Glass>
             </div>
-          </main>
-          <div className="image__wrapper">
-            <Glass>
-              <img src="" alt="person-img" />
-            </Glass>
-          </div>
-        </header>
+          </header>
+        </div>
       </div>
 
       {/* ABOUT SECTION */}
@@ -165,10 +186,44 @@ export default function Home() {
         </div>
       </section>
 
+      {/* DELETE BTN */}
+      <div
+        className={
+          (checkedDataWatcher.length > 0 ? "On " : "") + "deleteFixedBtn"
+        }
+        onClick={deleteDoc}
+      >
+        <p>Delete item</p>
+      </div>
+
+      <div
+        className={
+          (checkedDataWatcher.length === 1 ? "On " : "") +
+          "deleteFixedBtn CurrEdit"
+        }
+        onClick={() => console.log("Yeah")}
+      >
+        <p>Edit Current Portfolio</p>
+      </div>
+
       {/* PORTFOLIO WRAPPER */}
       <section className="portfolio__wrapper" id="myPortfolio">
         <div className="container">
-          <h1>Portfolio</h1>
+          <h1>
+            Portfolio
+            {devMode ? (
+              <div style={{ width: "100px", marginTop: "-12px" }}>
+                <Button
+                  type="button"
+                  className="add-btn"
+                  content={devEditMode ? "Close" : "Edit"}
+                  onClick={() => {
+                    setDevEditMode((p) => !p);
+                  }}
+                />
+              </div>
+            ) : null}
+          </h1>
           <main className="my-portfolios">
             {data?.map((i) => {
               return (
@@ -180,6 +235,19 @@ export default function Home() {
                     />
                   </div>
                   <div className="bottom">
+                    {devEditMode ? (
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        checked={
+                          checkedDataWatcher.includes(i.id.stringValue)
+                            ? true
+                            : false
+                        }
+                        onClick={() => checkDataId(i.id.stringValue)}
+                        id="flexCheckDefault"
+                      />
+                    ) : null}
                     <h2>{i?.title?.stringValue}</h2>
                     <h5>{i?.technologies?.stringValue}</h5>
                     <p
@@ -212,55 +280,62 @@ export default function Home() {
   );
 }
 const StyledHome = styled.div`
-  padding: 140px 0 60px;
-  height: 100vh;
+  padding: 0px;
+  margin: 0px;
 
-  .container {
-    /* HEADER SECTION STYLE */
-    .header__wrapper {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-wrap: wrap-reverse;
-      gap: 50px;
-      row-gap: 65px;
-      padding-bottom: 80px;
+  .headHeader {
+    padding: 140px 0 60px;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(rgb(19, 129, 255), rgb(0, 31, 78));
 
-      .headerMain {
-        h1 {
-          color: #fff;
-          font-weight: 800;
+    .container {
+      /* HEADER SECTION STYLE */
+      .header__wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-wrap: wrap-reverse;
+        gap: 50px;
+        row-gap: 65px;
+        padding-bottom: 80px;
+
+        .headerMain {
+          h1 {
+            color: #fff;
+            font-weight: 800;
+          }
+
+          h3 {
+            color: #fcfcfc;
+            font-weight: 600;
+            margin: 16px 0 32px;
+          }
+
+          & > p {
+            max-width: 400px;
+            color: #eeeded;
+            font-weight: 600;
+            line-height: 24px;
+            font-family: "Courier New", Courier, monospace;
+          }
+
+          .buttons__wrapper {
+            margin-top: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            row-gap: 36px;
+            gap: 30px;
+          }
         }
 
-        h3 {
-          color: #fcfcfc;
-          font-weight: 600;
-          margin: 16px 0 32px;
+        .image__wrapper {
+          width: 400px;
+          height: 450px;
+          position: relative;
         }
-
-        & > p {
-          max-width: 400px;
-          color: #eeeded;
-          font-weight: 600;
-          line-height: 24px;
-          font-family: "Courier New", Courier, monospace;
-        }
-
-        .buttons__wrapper {
-          margin-top: 32px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          flex-wrap: wrap;
-          row-gap: 36px;
-          gap: 30px;
-        }
-      }
-
-      .image__wrapper {
-        width: 400px;
-        height: 450px;
-        position: relative;
       }
     }
   }
@@ -342,15 +417,50 @@ const StyledHome = styled.div`
     }
   }
 
-  /* PORTFOLIO WRAPPER */
+  /* deleteFixedBtn */
+  .deleteFixedBtn {
+    cursor: pointer;
+    padding-left: 10px;
+    position: fixed;
+    z-index: 1;
+    right: -1000px;
+    top: 25%;
+    width: 110px;
+    height: 50px;
+    background-color: #ececec;
+    border-radius: 10px;
+    box-shadow: 0px 3px 7px 1px #aaa;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    transition: 0.2s;
 
+    &.CurrEdit {
+      top: 40%;
+    }
+
+    &.On {
+      right: -10px;
+    }
+
+    p {
+      margin: 0;
+      font-size: 13px;
+    }
+  }
+
+  /* PORTFOLIO WRAPPER */
   .portfolio__wrapper {
     padding: 130px 0px 200px;
     background-color: #ececec;
 
     .container {
       h1 {
-        text-align: center;
+        margin: 0px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 50px;
         font-weight: 800;
         font-size: 2rem;
         color: #1b1b1b;
@@ -363,6 +473,7 @@ const StyledHome = styled.div`
         justify-content: space-around;
         flex-wrap: wrap;
         gap: 30px;
+        row-gap: 50px;
 
         .blog_wrapper {
           position: relative;
@@ -391,6 +502,13 @@ const StyledHome = styled.div`
             position: relative;
             width: 100%;
             height: 180px;
+
+            .form-check-input {
+              cursor: pointer;
+              position: absolute;
+              top: 12px;
+              right: 25px;
+            }
 
             h2 {
               font-size: 20px;
