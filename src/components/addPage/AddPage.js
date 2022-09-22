@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 
@@ -9,8 +9,10 @@ import { storage } from "../../firebase";
 import { db } from "../../firebase";
 import { v4 } from "uuid";
 import Loading from "../loading/Loading";
+import { MyContext } from "../../context/Context";
 
 export default function AddPage({ open, setOpen }) {
+  const { isAdmin } = useContext(MyContext);
   const {
     register,
     handleSubmit,
@@ -63,6 +65,7 @@ export default function AddPage({ open, setOpen }) {
   }
 
   async function onSubmit(data) {
+    if (!isAdmin) return;
     setLoading(true);
     data.img = img;
     data.like = 0;

@@ -457,7 +457,7 @@ const StyledHome = styled.div`
     z-index: 1;
     right: -1000px;
     top: 25%;
-    width: 110px;
+    width: 110px;ececec
     height: 50px;
     background-color: #ececec;
     border-radius: 10px;
@@ -484,7 +484,7 @@ const StyledHome = styled.div`
   /* PORTFOLIO WRAPPER */
   .portfolio__wrapper {
     padding: 130px 0px 200px;
-    background-color: #ececec;
+    background-color: #;
 
     .container {
       h1 {

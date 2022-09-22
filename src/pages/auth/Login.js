@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { auth } from "../../firebase";
 
 export default function Login() {
   const {
@@ -12,19 +13,25 @@ export default function Login() {
   } = useForm();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
   async function LoginAuth(data) {
     setError(false);
     setLoading(true);
-    console.log(data);
-    const auth = getAuth();
+    let currUser = null;
+
     try {
       await signInWithEmailAndPassword(auth, data.email, data.password).then(
         (userCredential) => {
-          const user = userCredential.user;
-          console.log(user);
+          currUser = userCredential.user;
         }
       );
+      setError(false);
+      setUser(currUser);
+      localStorage.setItem("$ISAUTH$", "true");
+      localStorage.setItem("$T$O$K$E$N$", currUser?.accessToken);
+      navigate("home");
     } catch (error) {
       console.log(error);
       setError(true);
@@ -47,20 +54,32 @@ export default function Login() {
           <input
             type="email"
             id="form2Example1"
-            className="form-control"
+            className={(error ? "myError " : "") + "form-control"}
             {...register("email", { required: true })}
           />
           <label className="form-label">Email address</label>
         </div>
 
-        <div className="form-outline mb-4">
+        <div className="form-outline mb-2">
           <input
             type="password"
             id="form2Example2"
-            className="form-control"
+            className={(error ? "myError " : "") + "form-control"}
             {...register("password", { required: true })}
           />
           <label className="form-label">Password</label>
+        </div>
+
+        <div class="form-check mb-4">
+          <input
+            class="form-check-input"
+            type="checkbox"
+            value=""
+            id="form2Example31"
+          />
+          <label class="form-check-label" for="form2Example31">
+            Remember me
+          </label>
         </div>
 
         <button type="submit" className="btn btn-primary btn-block mb-4">
@@ -74,10 +93,6 @@ export default function Login() {
           <p>
             Not a member? <Link to="/register">Register</Link>
           </p>
-          <p>or sign up with:</p>
-          <button type="button" className="btn btn-link btn-floating mx-1">
-            <i className="fab fa-google"></i>
-          </button>
         </div>
       </form>
     </StyledLogin>
@@ -90,7 +105,7 @@ const StyledLogin = styled.div`
   form {
     width: 400px;
     margin: 0 auto;
-    margin-top: 60px;
+    margin-top: 45px;
 
     h1 {
       margin-bottom: 32px;
@@ -106,6 +121,12 @@ const StyledLogin = styled.div`
       margin: 0px 5%;
     }
 
+    input {
+      &.myError {
+        border: 1px solid red;
+      }
+    }
+
     .error {
       position: absolute;
       left: 50%;
@@ -113,6 +134,12 @@ const StyledLogin = styled.div`
       transform: translateX(-50%);
       font-size: 12px;
       color: red;
+    }
+  }
+
+  @media (max-width: 424px) {
+    form {
+      width: 300px;
     }
   }
 `;

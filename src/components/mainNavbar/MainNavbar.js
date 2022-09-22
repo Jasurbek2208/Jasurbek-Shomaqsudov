@@ -6,12 +6,19 @@ import styled from "styled-components";
 import { MyContext } from "../../context/Context";
 
 export default function MainNavbar() {
+  const { isAuth, isAdmin } = useContext(MyContext);
   const { setDevMode, setDevEditMode } = useContext(MyContext);
   const [menuToggle, setMenuToggle] = useState(false);
   const location = useLocation();
 
   function CloseNav() {
     setMenuToggle(false);
+  }
+
+  function LogOut() {
+    localStorage.removeItem("$ISAUTH$");
+    localStorage.removeItem("$T$O$K$E$N$");
+    CloseNav();
   }
 
   return (
@@ -76,42 +83,62 @@ export default function MainNavbar() {
                 <span className="right"></span>
               </Link>
             </li>
-            <li>
-              <Link
-                onClick={CloseNav}
-                to={"/adminPage"}
-                className={location === "/adminPage" ? "On" : ""}
-              >
-                Admin Page
-                <span className="right"></span>
-              </Link>
-            </li>
-            <li>
-              <Link
-                onClick={CloseNav}
-                to={"/login"}
-                className={location === "/login" ? "On" : ""}
-              >
-                Login or Register
-                <span className="right"></span>
-              </Link>
-            </li>
-            <li>
-              <label className="form-check-label" for="flexSwitchCheckDefault">
-                Developer mode
-              </label>
-              <div className="form-check form-switch">
-                <input
-                  onChange={() => {
-                    setDevMode((p) => !p);
-                    setDevEditMode(false);
-                  }}
-                  className="form-check-input"
-                  type="checkbox"
-                  id="flexSwitchCheckDefault"
-                />
-              </div>
-            </li>
+            {isAdmin ? (
+              <li>
+                <Link
+                  onClick={CloseNav}
+                  to={"/adminPage"}
+                  className={location === "/adminPage" ? "On" : ""}
+                >
+                  Admin Page
+                  <span className="right"></span>
+                </Link>
+              </li>
+            ) : null}
+            {isAuth ? (
+              <li>
+                <Link
+                  onClick={LogOut}
+                  to={"/login"}
+                  className={location === "/login" ? "On" : ""}
+                >
+                  LogOut
+                  <span className="right"></span>
+                </Link>
+              </li>
+            ) : (
+              <li>
+                <Link
+                  onClick={CloseNav}
+                  to={"/login"}
+                  className={location === "/login" ? "On" : ""}
+                >
+                  Login or Register
+                  <span className="right"></span>
+                </Link>
+              </li>
+            )}
+            {isAdmin ? (
+              <li>
+                <label
+                  className="form-check-label"
+                  for="flexSwitchCheckDefault"
+                >
+                  Developer mode
+                </label>
+                <div className="form-check form-switch">
+                  <input
+                    onChange={() => {
+                      setDevMode((p) => !p);
+                      setDevEditMode(false);
+                    }}
+                    className="form-check-input"
+                    type="checkbox"
+                    id="flexSwitchCheckDefault"
+                  />
+                </div>
+              </li>
+            ) : null}
           </ul>
         </div>
       </div>

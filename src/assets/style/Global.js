@@ -18,6 +18,27 @@ const GlobalStyle = createGlobalStyle`
         padding: 0 16px;
         margin: 0 auto;
     }
+
+    /* width */
+    ::-webkit-scrollbar {
+    width: 10px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+    background: #ccc; 
+    }
+    
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+    background: #888; 
+    transition: .2s;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+    background: #555; 
+    }
 `;
 
 export default GlobalStyle;
