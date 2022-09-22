@@ -22,8 +22,9 @@ export default function Home() {
     let list = [];
     const querySnapshot = await getDocs(collection(db, "portfolio"));
     querySnapshot.forEach((doc) => {
-      list.push(doc._document.data.value.mapValue.fields);
+      list.push(doc._document);
     });
+
     setData(list);
   }
 
@@ -85,12 +86,20 @@ export default function Home() {
 
   const [checkedDataWatcher, setCheckedDataWatcher] = useState([]);
   // DELETE DATA
-  async function deleteDoc() {
-    checkedDataWatcher.forEach((i) => {
-      deleteDoc(doc(db, "portfoio", i));
+  function deleteDocId() {
+    checkedDataWatcher.forEach((id) => {
+      dbDocDelete(id);
     });
-    setCheckedDataWatcher([]);
     getData();
+    setCheckedDataWatcher([]);
+  }
+
+  async function dbDocDelete(id) {
+    try {
+      deleteDoc(doc(db, "portfolio", id));
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   function checkDataId(id) {
@@ -191,7 +200,7 @@ export default function Home() {
         className={
           (checkedDataWatcher.length > 0 ? "On " : "") + "deleteFixedBtn"
         }
-        onClick={deleteDoc}
+        onClick={deleteDocId}
       >
         <p>Delete item</p>
       </div>
@@ -227,11 +236,17 @@ export default function Home() {
           <main className="my-portfolios">
             {data?.map((i) => {
               return (
-                <div key={i?.title?.stringValue} className="blog_wrapper">
+                <div
+                  key={i?.data?.value?.mapValue?.fields?.title?.stringValue}
+                  className="blog_wrapper"
+                >
                   <div className="top">
                     <img
-                      src={i?.img?.stringValue}
-                      alt={i?.title?.stringValue + ".jpg"}
+                      src={i?.data?.value?.mapValue?.fields?.img?.stringValue}
+                      alt={
+                        i?.data?.value?.mapValue?.fields?.title?.stringValue +
+                        ".jpg"
+                      }
                     />
                   </div>
                   <div className="bottom">
@@ -240,27 +255,44 @@ export default function Home() {
                         className="form-check-input"
                         type="checkbox"
                         checked={
-                          checkedDataWatcher.includes(i.id.stringValue)
+                          checkedDataWatcher.includes(i?.key?.path?.segments[6])
                             ? true
                             : false
                         }
-                        onClick={() => checkDataId(i.id.stringValue)}
+                        onChange={() => checkDataId(i?.key?.path?.segments[6])}
                         id="flexCheckDefault"
                       />
                     ) : null}
-                    <h2>{i?.title?.stringValue}</h2>
-                    <h5>{i?.technologies?.stringValue}</h5>
+                    <h2>
+                      {i?.data?.value?.mapValue?.fields?.title?.stringValue}
+                    </h2>
+                    <h5>
+                      {
+                        i?.data?.value?.mapValue?.fields?.technologies
+                          ?.stringValue
+                      }
+                    </h5>
                     <p
                       dangerouslySetInnerHTML={{
-                        __html: i?.description?.stringValue,
+                        __html:
+                          i?.data?.value?.mapValue?.fields?.description
+                            ?.stringValue,
                       }}
                     ></p>
                     <div className="link">
-                      <a href={i?.link?.stringValue}>Link to Project</a>
+                      <a
+                        href={
+                          i?.data?.value?.mapValue?.fields?.link?.stringValue
+                        }
+                      >
+                        Link to Project
+                      </a>
                       <div className="icon-wrapper">
-                        <span>{i?.like?.integerValue}</span>
+                        <span>
+                          {i?.data?.value?.mapValue?.fields?.like?.integerValue}
+                        </span>
                         <i
-                          id={i?.id?.stringValue}
+                          id={i?.data?.value?.mapValue?.fields?.id?.stringValue}
                           onClick={clickForLike}
                           className="icon icon-like fa-regular fa-thumbs-up"
                         ></i>

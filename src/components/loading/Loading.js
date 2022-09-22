@@ -13,7 +13,7 @@ export default function Loading() {
       }}
     >
       <div
-        class="spinner-border"
+        className="spinner-border"
         role="status"
         style={{
           position: "fixed",
@@ -22,7 +22,7 @@ export default function Loading() {
           scale: "200%",
         }}
       >
-        <span class="sr-only"></span>
+        <span className="sr-only"></span>
       </div>
     </div>
   );

@@ -100,7 +100,7 @@ export default function MainNavbar() {
               <label className="form-check-label" for="flexSwitchCheckDefault">
                 Developer mode
               </label>
-              <div class="form-check form-switch">
+              <div className="form-check form-switch">
                 <input
                   onChange={() => {
                     setDevMode((p) => !p);
