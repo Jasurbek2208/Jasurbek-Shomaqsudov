@@ -31,7 +31,7 @@ export default function Router() {
 
   useEffect(() => {
     getAdminsData();
-  }, []);
+  }, [isAuth]);
 
   return (
     <Routes>

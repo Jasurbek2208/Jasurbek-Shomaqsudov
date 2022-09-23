@@ -14,6 +14,7 @@ export default function MainNavbar() {
   function CloseNav() {
     setMenuToggle(false);
   }
+  console.log(isAdmin);
 
   function LogOut() {
     localStorage.removeItem("$ISAUTH$");
