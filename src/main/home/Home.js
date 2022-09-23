@@ -12,24 +12,34 @@ import Glass from "../../components/Glass/Glass";
 import { db } from "../../firebase";
 import MainFooter from "../../components/mainFooter/MainFooter";
 import { MyContext } from "../../context/Context";
+import Loading from "../../components/loading/Loading";
 
 export default function Home() {
   const { devMode, devEditMode, setDevEditMode } = useContext(MyContext);
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [likeLoading, setLikeLoading] = useState(false);
 
   // GET DATA
   async function getData() {
+    setLoading(true);
     let list = [];
-    const querySnapshot = await getDocs(collection(db, "portfolio"));
-    querySnapshot.forEach((doc) => {
-      list.push(doc._document);
-    });
-
-    setData(list);
+    try {
+      const querySnapshot = await getDocs(collection(db, "portfolio"));
+      querySnapshot.forEach((doc) => {
+        list.push(doc._document);
+      });
+      setData(list);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   }
 
   // CLICK LIKE
   async function clickForLike(e) {
+    setLikeLoading(true);
     let upDateData = null;
     let currentLike = false;
     let id = "";
@@ -67,7 +77,6 @@ export default function Home() {
         Object.entries(i).forEach((j) => {
           let jKey = j[0];
           let jValue = j[1];
-          console.log(j);
           upDateData = { ...upDateData, [jKey]: jValue };
         });
       });
@@ -75,12 +84,14 @@ export default function Home() {
       upDateData.like = currentLike
         ? Number(++num)
         : num !== 0
-        ? Number(--num)
-        : Number(num);
+          ? Number(--num)
+          : Number(num);
       await setDoc(docRef, upDateData);
       getData();
     } catch (e) {
       console.error("Error adding document: ", e);
+    } finally {
+      setLikeLoading(false);
     }
   }
 
@@ -234,74 +245,100 @@ export default function Home() {
             ) : null}
           </h1>
           <main className="my-portfolios">
-            {data?.map((i) => {
-              return (
-                <div
-                  key={i?.data?.value?.mapValue?.fields?.title?.stringValue}
-                  className="blog_wrapper"
-                >
-                  <div className="top">
-                    <img
-                      src={i?.data?.value?.mapValue?.fields?.img?.stringValue}
-                      alt={
-                        i?.data?.value?.mapValue?.fields?.title?.stringValue +
-                        ".jpg"
-                      }
-                    />
-                  </div>
-                  <div className="bottom">
-                    {devEditMode ? (
-                      <input
-                        className="form-check-input"
-                        type="checkbox"
-                        checked={
-                          checkedDataWatcher.includes(i?.key?.path?.segments[6])
-                            ? true
-                            : false
+            {loading ? (
+              <Loading />
+            ) : data.length === 0 ? (
+              <h1
+                style={{
+                  fontSize: "22px",
+                  textAlign: "center",
+                  lineHeight: "44px",
+                  marginTop: "20px",
+                }}
+              >
+                No portfolio or your internet is off!
+              </h1>
+            ) : (
+              data?.map((i) => {
+                return (
+                  <div
+                    key={i?.data?.value?.mapValue?.fields?.title?.stringValue}
+                    className="blog_wrapper"
+                  >
+                    <div className="top">
+                      <img
+                        src={i?.data?.value?.mapValue?.fields?.img?.stringValue}
+                        alt={
+                          i?.data?.value?.mapValue?.fields?.title?.stringValue +
+                          ".jpg"
                         }
-                        onChange={() => checkDataId(i?.key?.path?.segments[6])}
-                        id="flexCheckDefault"
                       />
-                    ) : null}
-                    <h2>
-                      {i?.data?.value?.mapValue?.fields?.title?.stringValue}
-                    </h2>
-                    <h5>
-                      {
-                        i?.data?.value?.mapValue?.fields?.technologies
-                          ?.stringValue
-                      }
-                    </h5>
-                    <p
-                      dangerouslySetInnerHTML={{
-                        __html:
-                          i?.data?.value?.mapValue?.fields?.description
-                            ?.stringValue,
-                      }}
-                    ></p>
-                    <div className="link">
-                      <a
-                        href={
-                          i?.data?.value?.mapValue?.fields?.link?.stringValue
+                    </div>
+                    <div className="bottom">
+                      {devEditMode ? (
+                        <input
+                          className="form-check-input"
+                          type="checkbox"
+                          checked={
+                            checkedDataWatcher.includes(
+                              i?.key?.path?.segments[6]
+                            )
+                              ? true
+                              : false
+                          }
+                          onChange={() =>
+                            checkDataId(i?.key?.path?.segments[6])
+                          }
+                          id="flexCheckDefault"
+                        />
+                      ) : null}
+                      <h2>
+                        {i?.data?.value?.mapValue?.fields?.title?.stringValue}
+                      </h2>
+                      <h5>
+                        {
+                          i?.data?.value?.mapValue?.fields?.technologies
+                            ?.stringValue
                         }
-                      >
-                        Link to Project
-                      </a>
-                      <div className="icon-wrapper">
-                        <span>
-                          {i?.data?.value?.mapValue?.fields?.like?.integerValue}
-                        </span>
-                        <i
-                          id={i?.data?.value?.mapValue?.fields?.id?.stringValue}
-                          onClick={clickForLike}
-                          className="icon icon-like fa-regular fa-thumbs-up"
-                        ></i>
+                      </h5>
+                      <p
+                        dangerouslySetInnerHTML={{
+                          __html:
+                            i?.data?.value?.mapValue?.fields?.description
+                              ?.stringValue,
+                        }}
+                      ></p>
+                      <div className="link">
+                        <a
+                          href={
+                            i?.data?.value?.mapValue?.fields?.link?.stringValue
+                          }
+                        >
+                          Link to Project
+                        </a>
+                        <div className="icon-wrapper">
+                          <span>
+                            {likeLoading ? (
+                              <Loading like={true} />
+                            ) : (
+                              i?.data?.value?.mapValue?.fields?.like
+                                ?.integerValue
+                            )}
+                          </span>
+                          <i
+                            id={
+                              i?.data?.value?.mapValue?.fields?.id?.stringValue
+                            }
+                            onClick={clickForLike}
+                            className="icon icon-like fa-regular fa-thumbs-up"
+                          ></i>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })
+            )}
           </main>
         </div>
       </section>
@@ -567,9 +604,15 @@ const StyledHome = styled.div`
                 font-size: 15px;
                 text-decoration: none;
                 color: #9c9c9cc8;
+                transition: 0.1s;
 
                 &:hover {
-                  color: blue;
+                  color: blueviolet;
+                }
+
+                &:focus {
+                  outline: none;
+                  color: blueviolet;
                 }
               }
 
