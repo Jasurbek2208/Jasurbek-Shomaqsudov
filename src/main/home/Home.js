@@ -21,8 +21,8 @@ export default function Home() {
   const [likeLoading, setLikeLoading] = useState(false);
 
   // GET DATA
-  async function getData() {
-    setLoading(true);
+  async function getData(what) {
+    if (what) { setLoading(true) };
     let list = [];
     try {
       const querySnapshot = await getDocs(collection(db, "portfolio"));
@@ -38,8 +38,10 @@ export default function Home() {
   }
 
   // CLICK LIKE
-  async function clickForLike(e) {
+  async function clickForLike(divId, e) {
     setLikeLoading(true);
+    const loadLikeId = document.getElementById(divId);
+    loadLikeId.innerHTML = `<div class="spinner-border spinner-border-sm" role="status"></div>`;
     let upDateData = null;
     let currentLike = false;
     let id = "";
@@ -87,7 +89,7 @@ export default function Home() {
           ? Number(--num)
           : Number(num);
       await setDoc(docRef, upDateData);
-      getData();
+      getData(false);
     } catch (e) {
       console.error("Error adding document: ", e);
     } finally {
@@ -124,7 +126,7 @@ export default function Home() {
   }
 
   useEffect(() => {
-    getData();
+    getData(true);
   }, []);
 
   useEffect(() => {
@@ -317,19 +319,20 @@ export default function Home() {
                           Link to Project
                         </a>
                         <div className="icon-wrapper">
-                          <span>
-                            {likeLoading ? (
-                              <Loading like={true} />
-                            ) : (
-                              i?.data?.value?.mapValue?.fields?.like
-                                ?.integerValue
-                            )}
+                          <span id={
+                            i?.data?.value?.mapValue?.fields?.id?.stringValue}>
+                            {i?.data?.value?.mapValue?.fields?.like
+                              ?.integerValue
+                            }
                           </span>
                           <i
                             id={
                               i?.data?.value?.mapValue?.fields?.id?.stringValue
                             }
-                            onClick={clickForLike}
+                            onClick={(e) => {
+                              if (!likeLoading) clickForLike(
+                                i?.data?.value?.mapValue?.fields?.id?.stringValue, e)
+                            }}
                             className="icon icon-like fa-regular fa-thumbs-up"
                           ></i>
                         </div>
