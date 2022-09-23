@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../firebase";
+import { MyContext } from "../../context/Context";
 
 export default function Login() {
+  const { setIsAuth } = useContext(MyContext);
   const {
     register,
     handleSubmit,
@@ -29,6 +31,7 @@ export default function Login() {
       );
       setError(false);
       setUser(currUser);
+      setIsAuth(true);
       localStorage.setItem("$ISAUTH$", "true");
       localStorage.setItem("$T$O$K$E$N$", currUser?.accessToken);
       navigate("home");
@@ -42,7 +45,7 @@ export default function Login() {
 
   return (
     <StyledLogin>
-      <Link to="home">
+      <Link to="/home">
         <button type="button" className="btn btn-primary btn-block mb-4">
           Back to Home
         </button>
@@ -57,7 +60,7 @@ export default function Login() {
             className={(error ? "myError " : "") + "form-control"}
             {...register("email", { required: true })}
           />
-          <label className="form-label">Email address</label>
+          <label className="form-label" htmlFor="form2Example1">Email address</label>
         </div>
 
         <div className="form-outline mb-2">
@@ -67,17 +70,17 @@ export default function Login() {
             className={(error ? "myError " : "") + "form-control"}
             {...register("password", { required: true })}
           />
-          <label className="form-label">Password</label>
+          <label className="form-label" htmlFor="form2Example2">Password</label>
         </div>
 
-        <div class="form-check mb-4">
+        <div className="form-check mb-4">
           <input
-            class="form-check-input"
+            className="form-check-input"
             type="checkbox"
             value=""
             id="form2Example31"
           />
-          <label class="form-check-label" for="form2Example31">
+          <label className="form-check-label" htmlFor="form2Example31">
             Remember me
           </label>
         </div>

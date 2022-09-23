@@ -1,20 +1,47 @@
-import React from "react";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import React, { useContext, useState } from "react";
+import { useForm } from "react-hook-form";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { auth } from "../../firebase";
+import { MyContext } from "../../context/Context";
 
-// async function LoginAuth() {
-//   const auth = getAuth();
-//   signInWithEmailAndPassword(auth, email, password)
-//     .then((userCredential) => {
-//       const user = userCredential.user;
-//     })
-//     .catch((error) => {
-//       console.log(error);
-//     });
-// }
+export default function Login() {
+  const { setIsAuth } = useContext(MyContext);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [user, setUser] = useState(null);
+  const navigate = useNavigate();
 
-export default function Register() {
+  async function RegisterAuth(data) {
+    // setError(false);
+    // setLoading(true);
+    // let currUser = null;
+    // try {
+    //   await signInWithEmailAndPassword(auth, data.email, data.password).then(
+    //     (userCredential) => {
+    //       currUser = userCredential.user;
+    //     }
+    //   );
+    //   setError(false);
+    //   setUser(currUser);
+    //   setIsAuth(true);
+    //   localStorage.setItem("$ISAUTH$", "true");
+    //   localStorage.setItem("$T$O$K$E$N$", currUser?.accessToken);
+    //   navigate("home");
+    // } catch (error) {
+    //   console.log(error);
+    //   setError(true);
+    // } finally {
+    //   setLoading(false);
+    // }
+  }
+
   return (
     <StyledLogin>
       <Link to="home">
@@ -23,34 +50,55 @@ export default function Register() {
         </button>
       </Link>
 
-      <form>
+      <form onSubmit={handleSubmit(RegisterAuth)}>
         <h1>Register</h1>
         <div className="form-outline mb-4">
-          <input type="email" id="form2Example1" className="form-control" />
-          <label className="form-label" for="form2Example1">
+          <input
+            type="email"
+            id="form2Example1"
+            className={(error ? "myError " : "") + "form-control"}
+            {...register("email", { required: true })}
+          />
+          <label className="form-label" htmlFor="form2Example1">
             Email address
           </label>
         </div>
 
-        <div className="form-outline mb-4">
-          <input type="password" id="form2Example2" className="form-control" />
-          <label className="form-label" for="form2Example2">
+        <div className="form-outline mb-2">
+          <input
+            type="password"
+            id="form2Example2"
+            className={(error ? "myError " : "") + "form-control"}
+            {...register("password", { required: true })}
+          />
+          <label className="form-label" htmlFor="form2Example2">
             Password
           </label>
         </div>
 
-        <button type="button" className="btn btn-primary btn-block mb-4">
+        <div className="form-check mb-4">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            value=""
+            id="form2Example31"
+          />
+          <label className="form-check-label" htmlFor="form2Example31">
+            Remember me
+          </label>
+        </div>
+
+        <button type="submit" className="btn btn-primary btn-block mb-4">
           Register
+          {error ? (
+            <span className="error">Email yoki Parol noto'g'ri !</span>
+          ) : null}
         </button>
 
         <div className="text-center">
           <p>
             Registered? <Link to="/login">Login</Link>
           </p>
-          <p>or sign up with:</p>
-          <button type="button" className="btn btn-link btn-floating mx-1">
-            <i className="fab fa-google"></i>
-          </button>
         </div>
       </form>
     </StyledLogin>
@@ -63,7 +111,7 @@ const StyledLogin = styled.div`
   form {
     width: 400px;
     margin: 0 auto;
-    margin-top: 60px;
+    margin-top: 45px;
 
     h1 {
       margin-bottom: 32px;
@@ -74,8 +122,30 @@ const StyledLogin = styled.div`
     }
 
     .btn-primary {
+      position: relative;
       width: 90%;
       margin: 0px 5%;
+    }
+
+    input {
+      &.myError {
+        border: 1px solid red;
+      }
+    }
+
+    .error {
+      position: absolute;
+      left: 50%;
+      bottom: -22px;
+      transform: translateX(-50%);
+      font-size: 12px;
+      color: red;
+    }
+  }
+
+  @media (max-width: 424px) {
+    form {
+      width: 300px;
     }
   }
 `;

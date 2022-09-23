@@ -19,13 +19,13 @@ export default function MainFooter() {
             <a href="https://t.me/JasurbekFrontend">Telegram Portfolio</a>
           </li>
           <li>
-            <a href="#">Instagram</a>
+            <a href="https://www.instagram.com/jasurbekshomaqsudov_frontend">Instagram</a>
           </li>
           <li>
-            <a href="#">Gmail</a>
+            <a href="mailto: jasurbekshomaqsudov2004@gmail.com">Gmail</a>
           </li>
           <li>
-            <a href="+998971052208">+998-97-105-22-08</a>
+            <a href="tel: +998971052208">+998-97-105-22-08</a>
           </li>
         </ul>
       </div>

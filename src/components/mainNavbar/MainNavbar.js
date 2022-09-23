@@ -6,7 +6,7 @@ import styled from "styled-components";
 import { MyContext } from "../../context/Context";
 
 export default function MainNavbar() {
-  const { isAuth, isAdmin } = useContext(MyContext);
+  const { isAuth, setIsAuth, isAdmin, setIsAdmin } = useContext(MyContext);
   const { setDevMode, setDevEditMode } = useContext(MyContext);
   const [menuToggle, setMenuToggle] = useState(false);
   const location = useLocation();
@@ -14,11 +14,12 @@ export default function MainNavbar() {
   function CloseNav() {
     setMenuToggle(false);
   }
-  console.log(isAdmin);
 
   function LogOut() {
     localStorage.removeItem("$ISAUTH$");
     localStorage.removeItem("$T$O$K$E$N$");
+    setIsAuth(false);
+    setIsAdmin(false);
     CloseNav();
   }
 

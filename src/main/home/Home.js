@@ -127,7 +127,7 @@ export default function Home() {
           {/* HEADER SECTION */}
           <header className="header__wrapper">
             <main className="headerMain">
-              <h1>Shomaqsudov Jasurbek</h1>
+              <h1 id="title">Shomaqsudov Jasurbek</h1>
               <h3>Front-End Developer</h3>
               <p>
                 My name is Jasurbek. And I'm The Front-End Developer. I have
