@@ -13,6 +13,7 @@ import { db } from "../../firebase";
 import MainFooter from "../../components/mainFooter/MainFooter";
 import { MyContext } from "../../context/Context";
 import Loading from "../../components/loading/Loading";
+import MySelect from "../../components/select/MySelect";
 
 export default function Home() {
   const { devMode, devEditMode, setDevEditMode } = useContext(MyContext);
@@ -22,7 +23,9 @@ export default function Home() {
 
   // GET DATA
   async function getData(what) {
-    if (what) { setLoading(true) };
+    if (what) {
+      setLoading(true);
+    }
     let list = [];
     try {
       const querySnapshot = await getDocs(collection(db, "portfolio"));
@@ -86,8 +89,8 @@ export default function Home() {
       upDateData.like = currentLike
         ? Number(++num)
         : num !== 0
-          ? Number(--num)
-          : Number(num);
+        ? Number(--num)
+        : Number(num);
       await setDoc(docRef, upDateData);
       getData(false);
     } catch (e) {
@@ -124,6 +127,37 @@ export default function Home() {
       );
     }
   }
+
+  // SORT
+  const [sortValue, setSortValue] = useState("");
+  function sortPosts(sort) {
+    setSortValue(sort);
+    sort.includes("like")
+      ? sort === "likeDown"
+        ? setData(
+            [...data].sort((a, b) =>
+              b.data?.value?.mapValue?.fields?.like.integerValue.localeCompare(
+                a.data?.value?.mapValue?.fields?.like.integerValue
+              )
+            )
+          )
+        : setData(
+            [...data].sort((a, b) =>
+              a.data?.value?.mapValue?.fields?.like?.integerValue.localeCompare(
+                b.data?.value?.mapValue?.fields?.like?.integerValue
+              )
+            )
+          )
+      : setData(
+          [...data].sort((a, b) =>
+            a.data?.value?.mapValue?.fields[sort].stringValue.localeCompare(
+              b.data?.value?.mapValue?.fields[sort].stringValue
+            )
+          )
+        );
+  }
+
+  // SEARCH
 
   useEffect(() => {
     getData(true);
@@ -246,6 +280,19 @@ export default function Home() {
               </div>
             ) : null}
           </h1>
+          <div className="post-actions">
+            <MySelect
+              options={[
+                { value: "title", name: "title" },
+                { value: "technologies", name: "technologies" },
+                { value: "likeUp", name: "popular Up" },
+                { value: "likeDown", name: "popular Down" },
+              ]}
+              defaultValue="sort by"
+              value={sortValue}
+              onChange={sortPosts}
+            />
+          </div>
           <main className="my-portfolios">
             {loading ? (
               <Loading />
@@ -319,10 +366,14 @@ export default function Home() {
                           Link to Project
                         </a>
                         <div className="icon-wrapper">
-                          <span id={
-                            i?.data?.value?.mapValue?.fields?.id?.stringValue}>
-                            {i?.data?.value?.mapValue?.fields?.like
-                              ?.integerValue
+                          <span
+                            id={
+                              i?.data?.value?.mapValue?.fields?.id?.stringValue
+                            }
+                          >
+                            {
+                              i?.data?.value?.mapValue?.fields?.like
+                                ?.integerValue
                             }
                           </span>
                           <i
@@ -330,8 +381,12 @@ export default function Home() {
                               i?.data?.value?.mapValue?.fields?.id?.stringValue
                             }
                             onClick={(e) => {
-                              if (!likeLoading) clickForLike(
-                                i?.data?.value?.mapValue?.fields?.id?.stringValue, e)
+                              if (!likeLoading)
+                                clickForLike(
+                                  i?.data?.value?.mapValue?.fields?.id
+                                    ?.stringValue,
+                                  e
+                                );
                             }}
                             className="icon icon-like fa-regular fa-thumbs-up"
                           ></i>
@@ -536,6 +591,10 @@ const StyledHome = styled.div`
         font-weight: 800;
         font-size: 2rem;
         color: #1b1b1b;
+      }
+
+      .post-actions {
+        padding: 16px 22px;
       }
 
       .my-portfolios {
