@@ -163,6 +163,7 @@ export default function Home() {
   const [filterValue, setFilterValue] = useState("");
   const [filteredData, setFilteredData] = useState([]);
   function filterPosts(filter) {
+    setFilterValue(filter);
     let filDate = [];
     filter === "All"
       ? (filDate = data)
