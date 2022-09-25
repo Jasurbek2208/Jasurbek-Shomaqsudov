@@ -14,6 +14,7 @@ import MainFooter from "../../components/mainFooter/MainFooter";
 import { MyContext } from "../../context/Context";
 import Loading from "../../components/loading/Loading";
 import MySelect from "../../components/select/MySelect";
+import MyInput from "../../components/input/MyInput";
 
 export default function Home() {
   const { devMode, devEditMode, setDevEditMode } = useContext(MyContext);
@@ -33,6 +34,7 @@ export default function Home() {
         list.push(doc._document);
       });
       setData(list);
+      setFilteredData(list);
     } catch (error) {
       console.log(error);
     } finally {
@@ -134,21 +136,21 @@ export default function Home() {
     setSortValue(sort);
     sort.includes("like")
       ? sort === "likeDown"
-        ? setData(
-            [...data].sort((a, b) =>
-              b.data?.value?.mapValue?.fields?.like.integerValue.localeCompare(
+        ? setFilteredData(
+            [...data].sort(
+              (a, b) =>
+                b.data?.value?.mapValue?.fields?.like.integerValue -
                 a.data?.value?.mapValue?.fields?.like.integerValue
-              )
             )
           )
-        : setData(
-            [...data].sort((a, b) =>
-              a.data?.value?.mapValue?.fields?.like?.integerValue.localeCompare(
+        : setFilteredData(
+            [...data].sort(
+              (a, b) =>
+                a.data?.value?.mapValue?.fields?.like?.integerValue +
                 b.data?.value?.mapValue?.fields?.like?.integerValue
-              )
             )
           )
-      : setData(
+      : setFilteredData(
           [...data].sort((a, b) =>
             a.data?.value?.mapValue?.fields[sort].stringValue.localeCompare(
               b.data?.value?.mapValue?.fields[sort].stringValue
@@ -157,7 +159,39 @@ export default function Home() {
         );
   }
 
+  // FILTER
+  const [filterValue, setFilterValue] = useState("");
+  const [filteredData, setFilteredData] = useState([]);
+  function filterPosts(filter) {
+    let filDate = [];
+    filter === "All"
+      ? (filDate = data)
+      : (filDate = data.filter((i) =>
+          i.data?.value?.mapValue?.fields?.technologies?.stringValue.includes(
+            filter
+          )
+            ? true
+            : false
+        ));
+    setFilteredData(filDate);
+  }
+
   // SEARCH
+  const [searchValue, setSearchValue] = useState("");
+  function searchPosts(search = "") {
+    setSearchValue(search);
+    let filDate = [];
+    search === ""
+      ? (filDate = data)
+      : (filDate = data.filter((i) =>
+          i.data?.value?.mapValue?.fields?.title?.stringValue
+            .toLowerCase()
+            .includes(search.toLowerCase())
+            ? true
+            : false
+        ));
+    setFilteredData(filDate);
+  }
 
   useEffect(() => {
     getData(true);
@@ -281,6 +315,7 @@ export default function Home() {
             ) : null}
           </h1>
           <div className="post-actions">
+            {/* SORT */}
             <MySelect
               options={[
                 { value: "title", name: "title" },
@@ -291,6 +326,28 @@ export default function Home() {
               defaultValue="sort by"
               value={sortValue}
               onChange={sortPosts}
+            />
+            {/* FILTER */}
+            <MySelect
+              options={[
+                { value: "All", name: "All" },
+                { value: "HTML 5", name: "HTML 5" },
+                { value: "CSS 3", name: "CSS 3" },
+                { value: "SASS", name: "Sass" },
+                { value: "JavaScript", name: "JavaScript" },
+                { value: "React", name: "React" },
+                { value: "Firebase", name: "Firebase" },
+                { value: "Bootstrap", name: "Bootstrap" },
+                { value: "Material UI", name: "Material UI" },
+              ]}
+              defaultValue="filter by"
+              value={filterValue}
+              onChange={filterPosts}
+            />
+            <MyInput
+              placeholder="Search posts by title..."
+              value={searchValue}
+              onChange={searchPosts}
             />
           </div>
           <main className="my-portfolios">
@@ -308,7 +365,7 @@ export default function Home() {
                 No portfolio or your internet is off!
               </h1>
             ) : (
-              data?.map((i) => {
+              filteredData?.map((i) => {
                 return (
                   <div
                     key={i?.data?.value?.mapValue?.fields?.title?.stringValue}
@@ -594,7 +651,14 @@ const StyledHome = styled.div`
       }
 
       .post-actions {
-        padding: 16px 22px;
+        margin-top: 20px;
+        padding: 18px 22px;
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+        gap: 20px;
+        row-gap: 30px;
+        flex-wrap: wrap;
       }
 
       .my-portfolios {
