@@ -20,6 +20,7 @@ const StyledSelect = styled.select`
   padding: 8px 12px;
   border: 1px solid #1b1b1b;
   background-color: transparent;
+  width: 240px;
 
   &:focus {
     outline: none;

@@ -655,9 +655,9 @@ const StyledHome = styled.div`
         padding: 18px 22px;
         display: flex;
         align-items: flex-start;
-        justify-content: flex-start;
-        gap: 20px;
-        row-gap: 30px;
+        justify-content: space-around;
+        gap: 30px;
+        row-gap: 40px;
         flex-wrap: wrap;
       }
 
