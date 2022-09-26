@@ -213,23 +213,67 @@ export default function Home() {
           {/* HEADER SECTION */}
           <header className="header__wrapper">
             <main className="headerMain">
-              <h1 id="title">Shomaqsudov Jasurbek</h1>
-              <h3>Front-End Developer</h3>
+              <h1 id="title">
+                {currentLang === "Uz"
+                  ? "Shomaqsudov Jasurbek"
+                  : currentLang === "Ru"
+                  ? "Жасурбек Шомаксудов"
+                  : "Shomakudov Jasurbek"}
+              </h1>
+              <h3>
+                {currentLang === "Uz"
+                  ? "Front-End Dasturchi"
+                  : currentLang === "Ru"
+                  ? "Front-End Разработчик"
+                  : "Front-End Developer"}
+              </h3>
               <p>
-                My name is Jasurbek. And I'm The Front-End Developer. I have
-                just started my job and am currently gaining experience. Why
-                should you choose Me? You will learn more about this by reading
-                the information on this site.
+                {currentLang === "Uz"
+                  ? `
+                  Mening ismim Jasurbek. Va men FrontEend Dasturchiman. Men
+                  ishimni endigina boshladim va hozirda tajriba orttiryapman. Nega
+                  meni tanlashing kerak? Ushbu saytdagi ma'lumotlarni o'qib, bu
+                  haqda ko'proq bilib olishingiz mumkin.`
+                  : currentLang ===
+                    `Меня зовут Жасурбек. И я Front-End Разработчик. Я только начал
+                  свою работу и в настоящее время набираюсь опыта. Почему вы
+                  должны выбрать Меня? Подробнее об этом вы узнаете, прочитав
+                  информацию на этом сайте.`
+                  ? "Front-End Разработчик"
+                  : `My name is Jasurbek. And I'm The Front-End Developer. I have
+                  just started my job and am currently gaining experience. Why
+                  should you choose Me? You will learn more about this by reading
+                  the information on this site.`}
               </p>
               <div className="buttons__wrapper">
-                <Button type="button" content="About Me" link="#aboutMe" />
                 <Button
                   type="button"
-                  content="Portfolio"
+                  content={
+                    currentLang === "Uz"
+                      ? "Men haqimda"
+                      : currentLang === "Ru"
+                      ? "обо мне"
+                      : "About Me"
+                  }
+                  link="#aboutMe"
+                />
+                <Button
+                  type="button"
+                  content={currentLang === "Ru" ? "Портфолио" : "Portfolio"}
                   link="#myPortfolio"
                   portfolio={true}
                 />
-                <Button type="button" content="Contact Me" link="#contactMe" />
+                <Button
+                  type="button"
+                  content={
+                    currentLang === "Uz"
+                      ? "Men bilan bog'lanish"
+                      : currentLang === "Ru"
+                      ? "Связаться со мной"
+                      : "Contact Me"
+                  }
+                  link="#contactMe"
+                />
               </div>
             </main>
             <div className="image__wrapper">
