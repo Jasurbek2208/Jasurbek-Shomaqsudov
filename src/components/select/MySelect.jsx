@@ -1,9 +1,19 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function ({ options, defaultValue, value, onChange }) {
+export default function ({
+  options,
+  defaultValue,
+  value,
+  onChange,
+  className = "",
+}) {
   return (
-    <StyledSelect value={value} onChange={(e) => onChange(e.target.value)}>
+    <StyledSelect
+      className={className}
+      value={value}
+      onChange={(e) => onChange(e.target.value)}
+    >
       <option disabled value="">
         {defaultValue}
       </option>
@@ -24,5 +34,14 @@ const StyledSelect = styled.select`
 
   &:focus {
     outline: none;
+  }
+
+  &.lang-select {
+    border: 1px solid #fff;
+    background-color: #ccc;
+
+    option {
+      color: #000;
+    }
   }
 `;

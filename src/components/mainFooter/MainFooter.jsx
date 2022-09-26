@@ -1,11 +1,19 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
+import { MyContext } from "../../context/Context";
 
 export default function MainFooter() {
+  const { currentLang } = useContext(MyContext);
   return (
     <StyledFooter id="contactMe">
       <div className="container">
-        <h1>Contacts</h1>
+        <h1>
+          {currentLang === "Uz"
+            ? "Aloqa"
+            : currentLang === "Ru"
+            ? "Контакты"
+            : "Contacts"}
+        </h1>
         <ul>
           <li>
             <a href="https://my-portfolio-jasurbekshomaqsudov.vercel.app">
@@ -19,7 +27,9 @@ export default function MainFooter() {
             <a href="https://t.me/JasurbekFrontend">Telegram Portfolio</a>
           </li>
           <li>
-            <a href="https://www.instagram.com/jasurbekshomaqsudov_frontend">Instagram</a>
+            <a href="https://www.instagram.com/jasurbekshomaqsudov_frontend">
+              Instagram
+            </a>
           </li>
           <li>
             <a href="mailto: jasurbekshomaqsudov2004@gmail.com">Gmail</a>

@@ -17,7 +17,8 @@ import MySelect from "../../components/select/MySelect";
 import MyInput from "../../components/input/MyInput";
 
 export default function Home() {
-  const { devMode, devEditMode, setDevEditMode } = useContext(MyContext);
+  const { devMode, devEditMode, setDevEditMode, currentLang } =
+    useContext(MyContext);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [likeLoading, setLikeLoading] = useState(false);
@@ -146,8 +147,8 @@ export default function Home() {
         : setFilteredData(
             [...filteredData].sort(
               (a, b) =>
-              b.data?.value?.mapValue?.fields?.like?.integerValue -
-                a.data?.value?.mapValue?.fields?.like?.integerValue 
+                b.data?.value?.mapValue?.fields?.like?.integerValue -
+                a.data?.value?.mapValue?.fields?.like?.integerValue
             )
           )
       : setFilteredData(
@@ -243,15 +244,35 @@ export default function Home() {
       {/* ABOUT SECTION */}
       <section className="about__wrapper" id="aboutMe">
         <div className="container">
-          <h1>About Me</h1>
+          <h1>
+            {currentLang === "Uz"
+              ? "Men haqimda"
+              : currentLang === "Ru"
+              ? "обо мне"
+              : "About Me"}
+          </h1>
           <div className="aboutMe-blok">
             <p>
-              My name is Shomaksudov Jasurbek and I was born on August 22, 2004
+              {currentLang === "En"
+                ? `My name is Shomaksudov Jasurbek and I was born on August 22, 2004
               in Tashkent. I am a Front-End developer. I entered this field
               because of my own interests. In this field, I studied at the
               school "Registon IT" in Tashkent and completed 2 months of
               internship. My main goal these days is to increase my experience
-              and become a strong developer.
+              and become a strong developer.`
+                : currentLang === "Ru"
+                ? `Меня зовут Шомаксудов Жасурбек, я родился 22 августа 2004 года в
+                Ташкенте. Я Front-End разработчик. Я пришел в эту сферу из-за моих
+                собственных интересов. По этому направлению я учился в школе
+                «Registon IT» в Ташкенте и прошел 2-х месячную стажировку. Моя
+                главная цель в эти дни — увеличить свой опыт и стать сильным
+                разработчиком.`
+                : `Mening ismim Shomaqsudov Jasurbek va men 2004-yilning 22-Avgust
+                kuni Toshkent shahrida tug'ilganman. Men Front-End dasturchiman.
+                Men bu sohaga o'z qiziqishlarim sabab kirib kelganman. Bu sohada
+                Toshkent shahridagi "Registon IT" nomli maktabda o'qib 2Oy
+                amaliyot o'taganman. Hozirgi kundagi asosiy maqsadim o'z
+                tajribamni oshirish va kuchli dasturchi bo'lish.`}
             </p>
           </div>
         </div>
@@ -260,7 +281,13 @@ export default function Home() {
       {/* SKILLS SECTION */}
       <section className="skills__wrapper" id="my-skills">
         <div className="container">
-          <h1>Skills</h1>
+          <h1>
+            {currentLang === "Uz"
+              ? "Ko'nikmalar"
+              : currentLang === "Ru"
+              ? "Навыки"
+              : "Skills"}
+          </h1>
           <div className="skills-blok">
             <div className="left">
               <p>HTML 5</p>

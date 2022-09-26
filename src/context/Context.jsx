@@ -9,6 +9,7 @@ export default function Context({ children }) {
   const [devMode, setDevMode] = useState(false);
   const [devEditMode, setDevEditMode] = useState(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [currentLang, setCurrentLang] = useState("En");
 
   return (
     <MyContext.Provider
@@ -21,6 +22,8 @@ export default function Context({ children }) {
         setIsAuth,
         isAdmin,
         setIsAdmin,
+        currentLang,
+        setCurrentLang,
       }}
     >
       {children}

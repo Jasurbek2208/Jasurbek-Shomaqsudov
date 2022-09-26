@@ -4,6 +4,7 @@ import styled from "styled-components";
 
 // Context
 import { MyContext } from "../../context/Context";
+import MySelect from "../select/MySelect";
 
 export default function MainNavbar() {
   const { isAuth, setIsAuth, isAdmin, setIsAdmin } = useContext(MyContext);
@@ -14,6 +15,7 @@ export default function MainNavbar() {
 
   function CloseNav() {
     setMenuToggle(false);
+    document.body.style.overflow = "auto";
   }
 
   function LogOut() {
@@ -22,6 +24,18 @@ export default function MainNavbar() {
     setIsAuth(false);
     setIsAdmin(false);
     CloseNav();
+  }
+
+  function navToggle() {
+    setMenuToggle((p) => !p);
+    !menuToggle
+      ? (document.body.style.overflow = "hidden")
+      : (document.body.style.overflow = "auto");
+  }
+
+  const {currentLang, setCurrentLang} = useContext(MyContext);
+  function langChang(currLang) {
+    setCurrentLang(currLang);
   }
 
   return (
@@ -53,7 +67,7 @@ export default function MainNavbar() {
           </h1>
           <div
             className={(menuToggle ? "On " : "") + "menu-btn"}
-            onClick={() => setMenuToggle((p) => !p)}
+            onClick={navToggle}
           >
             <span id="span1"></span>
             <span id="span2"></span>
@@ -74,7 +88,11 @@ export default function MainNavbar() {
                   to={"home"}
                   className={location.hash === "header" ? "On" : ""}
                 >
-                  Home
+                  {currentLang === "Uz"
+                    ? "Bosh Sahifa"
+                    : currentLang === "Ru"
+                    ? "Главная Страница"
+                    : "Home"}
                   <span className="left"></span>
                 </Link>
               </li>
@@ -87,7 +105,11 @@ export default function MainNavbar() {
                   href={"home#header"}
                   className={location.hash === "#header" ? "On" : ""}
                 >
-                  Home
+                  {currentLang === "Uz"
+                    ? "Bosh Sahifa"
+                    : currentLang === "Ru"
+                    ? "Главная Страница"
+                    : "Home"}
                   <span className="left"></span>
                 </a>
               </li>
@@ -97,7 +119,11 @@ export default function MainNavbar() {
                   href={"home#aboutMe"}
                   className={location.hash === "#aboutMe" ? "On" : ""}
                 >
-                  About
+                  {currentLang === "Uz"
+                    ? "Batafsil"
+                    : currentLang === "Ru"
+                    ? "Подробно"
+                    : "About"}
                   <span className="right"></span>
                 </a>
               </li>
@@ -107,7 +133,11 @@ export default function MainNavbar() {
                   href={"home#myPortfolio"}
                   className={location === "#myPortfolio" ? "On" : ""}
                 >
-                  Portfolio
+                  {currentLang === "Uz"
+                    ? "Portfolio"
+                    : currentLang === "Ru"
+                    ? "Портфолио"
+                    : "Portfolio"}
                   <span className="left"></span>
                 </a>
               </li>
@@ -117,7 +147,11 @@ export default function MainNavbar() {
                   href={"home#contactMe"}
                   className={location === "#contactMe" ? "On" : ""}
                 >
-                  Contacts
+                  {currentLang === "Uz"
+                    ? "Aloqa"
+                    : currentLang === "Ru"
+                    ? "Контакты"
+                    : "Contacts"}
                   <span className="right"></span>
                 </a>
               </li>
@@ -131,7 +165,11 @@ export default function MainNavbar() {
                     to={"/adminPage"}
                     className={location === "/adminPage" ? "On" : ""}
                   >
-                    Admin Page
+                    {currentLang === "Uz"
+                      ? "Admin Sahifasi"
+                      : currentLang === "Ru"
+                      ? "Страница Админа"
+                      : "Admin Page"}
                     <span className="right"></span>
                   </Link>
                 </li>
@@ -143,7 +181,11 @@ export default function MainNavbar() {
                     to={"/login"}
                     className={location === "/login" ? "On" : ""}
                   >
-                    LogOut
+                  {currentLang === "Uz"
+                    ? "Chiqish"
+                    : currentLang === "Ru"
+                    ? "Выйти"
+                    : "LogOut"}
                     <span className="right"></span>
                   </Link>
                 </li>
@@ -159,6 +201,19 @@ export default function MainNavbar() {
                   </Link>
                 </li>
               )}
+              <li>
+                <MySelect
+                  options={[
+                    { value: "Uz", name: "Uzbek" },
+                    { value: "Ru", name: "Russian" },
+                    { value: "En", name: "English" },
+                  ]}
+                  value={currentLang}
+                  defaultValue="language"
+                  onChange={langChang}
+                  className="lang-select"
+                />
+              </li>
               {isAdmin ? (
                 <li>
                   <label
@@ -261,6 +316,7 @@ const StyledNavbar = styled.nav`
     height: 100vh;
     z-index: 2;
     background-color: #1f1f1f;
+    overflow: auto;
     transition: 0.5s;
 
     &.On {
