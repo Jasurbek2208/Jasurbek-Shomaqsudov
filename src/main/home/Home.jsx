@@ -383,7 +383,7 @@ export default function Home() {
           </div>
           <main className="my-portfolios">
             {loading ? (
-              <Loading />
+              <Loading winLoad={true} />
             ) : filteredData.length === 0 ? (
               <h1
                 style={{
