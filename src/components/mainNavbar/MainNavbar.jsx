@@ -8,6 +8,7 @@ import { MyContext } from "../../context/Context";
 export default function MainNavbar() {
   const { isAuth, setIsAuth, isAdmin, setIsAdmin } = useContext(MyContext);
   const { setDevMode, setDevEditMode } = useContext(MyContext);
+  const [isDevMode, setIsDevEditMode] = useState(false);
   const [menuToggle, setMenuToggle] = useState(false);
   const location = useLocation();
 
@@ -28,9 +29,27 @@ export default function MainNavbar() {
       <div className="navbar__wrapper">
         <div className="container">
           <h1>
-            <a onClick={CloseNav} href="/home#">
-              Portfolio
-            </a>
+            {isDevMode ? (
+              <Link
+                onClick={() => {
+                  CloseNav();
+                  setIsDevEditMode(false);
+                }}
+                to="home"
+              >
+                Portfolio
+              </Link>
+            ) : (
+              <a
+                onClick={() => {
+                  CloseNav();
+                  setIsDevEditMode(false);
+                }}
+                href="/home#"
+              >
+                Portfolio
+              </a>
+            )}
           </h1>
           <div
             className={(menuToggle ? "On " : "") + "menu-btn"}
@@ -44,104 +63,125 @@ export default function MainNavbar() {
       </div>
       <div className={(menuToggle ? "On " : "") + "menu__wrappper"}>
         <div className="container">
-          <ul>
-            <li>
-              <a
-                onClick={CloseNav}
-                href={"home#header"}
-                className={location.hash === "#header" ? "On" : ""}
-              >
-                Home
-                <span className="left"></span>
-              </a>
-            </li>
-            <li>
-              <a
-                onClick={CloseNav}
-                href={"home#aboutMe"}
-                className={location.hash === "#aboutMe" ? "On" : ""}
-              >
-                About
-                <span className="right"></span>
-              </a>
-            </li>
-            <li>
-              <a
-                onClick={CloseNav}
-                href={"home#myPortfolio"}
-                className={location === "#myPortfolio" ? "On" : ""}
-              >
-                Portfolio
-                <span className="left"></span>
-              </a>
-            </li>
-            <li>
-              <Link
-                onClick={CloseNav}
-                to={"/contacts"}
-                className={location === "/contacts" ? "On" : ""}
-              >
-                Contacts
-                <span className="right"></span>
-              </Link>
-            </li>
-            {isAdmin ? (
+          {isDevMode ? (
+            <ul>
               <li>
                 <Link
+                  onClick={() => {
+                    CloseNav();
+                    setIsDevEditMode(false);
+                  }}
+                  to={"home"}
+                  className={location.hash === "header" ? "On" : ""}
+                >
+                  Home
+                  <span className="left"></span>
+                </Link>
+              </li>
+            </ul>
+          ) : (
+            <ul>
+              <li>
+                <a
                   onClick={CloseNav}
-                  to={"/adminPage"}
-                  className={location === "/adminPage" ? "On" : ""}
+                  href={"home#header"}
+                  className={location.hash === "#header" ? "On" : ""}
                 >
-                  Admin Page
-                  <span className="right"></span>
-                </Link>
+                  Home
+                  <span className="left"></span>
+                </a>
               </li>
-            ) : null}
-            {isAuth ? (
               <li>
-                <Link
-                  onClick={LogOut}
-                  to={"/login"}
-                  className={location === "/login" ? "On" : ""}
-                >
-                  LogOut
-                  <span className="right"></span>
-                </Link>
-              </li>
-            ) : (
-              <li>
-                <Link
+                <a
                   onClick={CloseNav}
-                  to={"/login"}
-                  className={location === "/login" ? "On" : ""}
+                  href={"home#aboutMe"}
+                  className={location.hash === "#aboutMe" ? "On" : ""}
                 >
-                  Login or Register
+                  About
                   <span className="right"></span>
-                </Link>
+                </a>
               </li>
-            )}
-            {isAdmin ? (
               <li>
-                <label
-                  className="form-check-label"
-                  for="flexSwitchCheckDefault"
+                <a
+                  onClick={CloseNav}
+                  href={"home#myPortfolio"}
+                  className={location === "#myPortfolio" ? "On" : ""}
                 >
-                  Developer mode
-                </label>
-                <div className="form-check form-switch">
-                  <input
-                    onChange={() => {
-                      setDevMode((p) => !p);
-                      setDevEditMode(false);
+                  Portfolio
+                  <span className="left"></span>
+                </a>
+              </li>
+              <li>
+                <a
+                  onClick={CloseNav}
+                  href={"home#contactMe"}
+                  className={location === "#contactMe" ? "On" : ""}
+                >
+                  Contacts
+                  <span className="right"></span>
+                </a>
+              </li>
+              {isAdmin ? (
+                <li>
+                  <Link
+                    onClick={() => {
+                      CloseNav();
+                      setIsDevEditMode(true);
                     }}
-                    className="form-check-input"
-                    type="checkbox"
-                    id="flexSwitchCheckDefault"
-                  />
-                </div>
-              </li>
-            ) : null}
-          </ul>
+                    to={"/adminPage"}
+                    className={location === "/adminPage" ? "On" : ""}
+                  >
+                    Admin Page
+                    <span className="right"></span>
+                  </Link>
+                </li>
+              ) : null}
+              {isAuth ? (
+                <li>
+                  <Link
+                    onClick={LogOut}
+                    to={"/login"}
+                    className={location === "/login" ? "On" : ""}
+                  >
+                    LogOut
+                    <span className="right"></span>
+                  </Link>
+                </li>
+              ) : (
+                <li>
+                  <Link
+                    onClick={CloseNav}
+                    to={"/login"}
+                    className={location === "/login" ? "On" : ""}
+                  >
+                    Login or Register
+                    <span className="right"></span>
+                  </Link>
+                </li>
+              )}
+              {isAdmin ? (
+                <li>
+                  <label
+                    className="form-check-label"
+                    for="flexSwitchCheckDefault"
+                  >
+                    Developer mode
+                  </label>
+                  <div className="form-check form-switch">
+                    <input
+                      onChange={() => {
+                        setDevMode((p) => !p);
+                        setDevEditMode(false);
+                      }}
+                      className="form-check-input"
+                      type="checkbox"
+                      id="flexSwitchCheckDefault"
+                    />
+                  </div>
+                </li>
+              ) : null}
+            </ul>
+          )}
         </div>
       </div>
     </StyledNavbar>
