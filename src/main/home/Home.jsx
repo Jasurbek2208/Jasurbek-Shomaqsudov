@@ -137,21 +137,21 @@ export default function Home() {
     sort.includes("like")
       ? sort === "likeDown"
         ? setFilteredData(
-            [...data].sort(
+            [...filteredData].sort(
               (a, b) =>
-                b.data?.value?.mapValue?.fields?.like.integerValue -
-                a.data?.value?.mapValue?.fields?.like.integerValue
+                a.data?.value?.mapValue?.fields?.like.integerValue -
+                b.data?.value?.mapValue?.fields?.like.integerValue
             )
           )
         : setFilteredData(
-            [...data].sort(
+            [...filteredData].sort(
               (a, b) =>
-                a.data?.value?.mapValue?.fields?.like?.integerValue +
-                b.data?.value?.mapValue?.fields?.like?.integerValue
+              b.data?.value?.mapValue?.fields?.like?.integerValue -
+                a.data?.value?.mapValue?.fields?.like?.integerValue 
             )
           )
       : setFilteredData(
-          [...data].sort((a, b) =>
+          [...filteredData].sort((a, b) =>
             a.data?.value?.mapValue?.fields[sort].stringValue.localeCompare(
               b.data?.value?.mapValue?.fields[sort].stringValue
             )
@@ -175,12 +175,15 @@ export default function Home() {
             : false
         ));
     setFilteredData(filDate);
+    setSortValue("");
   }
 
   // SEARCH
   const [searchValue, setSearchValue] = useState("");
   function searchPosts(search = "") {
     setSearchValue(search);
+    setFilterValue("");
+    setSortValue("");
     let filDate = [];
     search === ""
       ? (filDate = data)
@@ -354,7 +357,7 @@ export default function Home() {
           <main className="my-portfolios">
             {loading ? (
               <Loading />
-            ) : data.length === 0 ? (
+            ) : filteredData.length === 0 ? (
               <h1
                 style={{
                   fontSize: "22px",
@@ -363,7 +366,7 @@ export default function Home() {
                   marginTop: "20px",
                 }}
               >
-                No portfolio or your internet is off!
+                Portolio not found !
               </h1>
             ) : (
               filteredData?.map((i) => {
