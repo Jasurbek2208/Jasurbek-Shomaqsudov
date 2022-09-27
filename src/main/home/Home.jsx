@@ -16,6 +16,9 @@ import Loading from "../../components/loading/Loading";
 import MySelect from "../../components/select/MySelect";
 import MyInput from "../../components/input/MyInput";
 
+//
+import myRezume from "../../assets/pdf/ShomaqsudovJasurbekResume.pdf";
+
 export default function Home() {
   const { devMode, devEditMode, setDevEditMode, currentLang } =
     useContext(MyContext);
@@ -176,19 +179,21 @@ export default function Home() {
             : false
         ));
     setFilteredData(filDate);
+    setCurrFilDate(filDate);
     setSortValue("");
   }
 
   // SEARCH
   const [searchValue, setSearchValue] = useState("");
+  const [currFilDate, setCurrFilDate] = useState([]);
   function searchPosts(search = "") {
+    setFilteredData(currFilDate);
     setSearchValue(search);
-    setFilterValue("");
     setSortValue("");
     let filDate = [];
     search === ""
-      ? (filDate = data)
-      : (filDate = data.filter((i) =>
+      ? (filDate = currFilDate)
+      : (filDate = currFilDate.filter((i) =>
           i.data?.value?.mapValue?.fields?.title?.stringValue
             .toLowerCase()
             .includes(search.toLowerCase())
@@ -196,6 +201,19 @@ export default function Home() {
             : false
         ));
     setFilteredData(filDate);
+  }
+
+  // Download Rezume
+  function downloadRezume(e) {
+    fetch(myRezume).then((response) => {
+      response.blob().then((blob) => {
+        const fileURL = window.URL.createObjectURL(blob);
+        let alink = document.createElement("a");
+        alink.href = fileURL;
+        alink.download = "ShomaqsudovJasurbekResume";
+        alink.click();
+      });
+    });
   }
 
   useEffect(() => {
@@ -234,12 +252,11 @@ export default function Home() {
                   ishimni endigina boshladim va hozirda tajriba orttiryapman. Nega
                   meni tanlashing kerak? Ushbu saytdagi ma'lumotlarni o'qib, bu
                   haqda ko'proq bilib olishingiz mumkin.`
-                  : currentLang ===
-                    `Меня зовут Жасурбек. И я Front-End Разработчик. Я только начал
+                  : currentLang === "Ru"
+                  ? `Меня зовут Жасурбек. И я Front-End Разработчик. Я только начал
                   свою работу и в настоящее время набираюсь опыта. Почему вы
                   должны выбрать Меня? Подробнее об этом вы узнаете, прочитав
                   информацию на этом сайте.`
-                  ? "Front-End Разработчик"
                   : `My name is Jasurbek. And I'm The Front-End Developer. I have
                   just started my job and am currently gaining experience. Why
                   should you choose Me? You will learn more about this by reading
@@ -318,6 +335,16 @@ export default function Home() {
                 amaliyot o'taganman. Hozirgi kundagi asosiy maqsadim o'z
                 tajribamni oshirish va kuchli dasturchi bo'lish.`}
             </p>
+          </div>
+
+          {/* Download Rezume */}
+          <div className="rezume-wrapper">
+            <Button
+              type="button"
+              content="Download Rezume"
+              onClick={downloadRezume}
+              className="download-rezume"
+            />
           </div>
         </div>
       </section>
@@ -601,7 +628,7 @@ const StyledHome = styled.div`
 
   /* ABOUT SECTION STYLE */
   .about__wrapper {
-    padding: 130px 0 200px;
+    padding: 130px 0 140px;
     background-color: #ececec;
 
     .container {
@@ -626,12 +653,19 @@ const StyledHome = styled.div`
           line-height: 27px;
         }
       }
+
+      .rezume-wrapper {
+        margin-top: 120px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
     }
   }
 
   /* SKILLS WRAPPER */
   .skills__wrapper {
-    padding: 20px 0 50px;
+    padding: 0px 0 50px;
     background-color: #ececec;
 
     .container {

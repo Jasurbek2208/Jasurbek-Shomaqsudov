@@ -77,4 +77,12 @@ const StyledButton = styled.a`
       }
     }
   }
+
+  &.download-rezume {
+    border: 1px solid #1b1b1b;
+
+    button {
+      color: #1b1b1b;
+    }
+  }
 `;
