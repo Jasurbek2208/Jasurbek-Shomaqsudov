@@ -1,10 +1,12 @@
 import React, { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
-import { signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../firebase";
 import { MyContext } from "../../context/Context";
+import { GoogleAuthProvider } from "firebase/auth";
+import Button from "../../components/button/Button";
 
 export default function Login() {
   const { setIsAuth } = useContext(MyContext);
@@ -42,6 +44,21 @@ export default function Login() {
     // }
   }
 
+  async function registerUser({ email, password }) {
+    console.log(email, password);
+    await createUserWithEmailAndPassword(auth, email, password)
+      .then((userCredential) => {
+        const user = userCredential.user;
+        setUser(user);
+        setIsAuth(true);
+        localStorage.setItem("$ISAUTH$", "true");
+        localStorage.setItem("$T$O$K$E$N$", user?.accessToken);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   return (
     <StyledLogin>
       <Link to="home">
@@ -50,7 +67,7 @@ export default function Login() {
         </button>
       </Link>
 
-      <form onSubmit={handleSubmit(RegisterAuth)}>
+      <form onSubmit={handleSubmit(registerUser)}>
         <h1>Register</h1>
         <div className="form-outline mb-4">
           <input
@@ -76,19 +93,7 @@ export default function Login() {
           </label>
         </div>
 
-        <div className="form-check mb-4">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            value=""
-            id="form2Example31"
-          />
-          <label className="form-check-label" htmlFor="form2Example31">
-            Remember me
-          </label>
-        </div>
-
-        <button type="submit" className="btn btn-primary btn-block mb-4">
+        <button type="submit" className="btn btn-primary btn-block mb-4 mt-3">
           Register
           {error ? (
             <span className="error">Email yoki Parol noto'g'ri !</span>
@@ -107,6 +112,12 @@ export default function Login() {
 
 const StyledLogin = styled.div`
   padding-top: 50px;
+
+a {
+  :focus {
+    outline: none;
+  }
+}
 
   form {
     width: 400px;

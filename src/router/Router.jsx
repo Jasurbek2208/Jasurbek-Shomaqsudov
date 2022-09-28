@@ -24,7 +24,11 @@ export default function Router() {
         doc._firestore._authCredentials.auth.auth.currentUser.accessToken ===
         token
       ) {
-        setIsAdmin(true);
+        if (
+          doc?._firestore._authCredentials.auth.auth.currentUser.uid === doc?.id
+        ) {
+          setIsAdmin(true);
+        }
       }
     });
   }

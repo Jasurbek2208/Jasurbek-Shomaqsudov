@@ -29,7 +29,6 @@ export default function Login() {
           currUser = userCredential.user;
         }
       );
-      setError(false);
       setUser(currUser);
       setIsAuth(true);
       localStorage.setItem("$ISAUTH$", "true");
@@ -40,6 +39,7 @@ export default function Login() {
       setError(true);
     } finally {
       setLoading(false);
+      setError(false);
     }
   }
 
@@ -60,7 +60,9 @@ export default function Login() {
             className={(error ? "myError " : "") + "form-control"}
             {...register("email", { required: true })}
           />
-          <label className="form-label" htmlFor="form2Example1">Email address</label>
+          <label className="form-label" htmlFor="form2Example1">
+            Email address
+          </label>
         </div>
 
         <div className="form-outline mb-2">
@@ -70,25 +72,17 @@ export default function Login() {
             className={(error ? "myError " : "") + "form-control"}
             {...register("password", { required: true })}
           />
-          <label className="form-label" htmlFor="form2Example2">Password</label>
-        </div>
-
-        <div className="form-check mb-4">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            value=""
-            id="form2Example31"
-          />
-          <label className="form-check-label" htmlFor="form2Example31">
-            Remember me
+          <label className="form-label" htmlFor="form2Example2">
+            Password
           </label>
         </div>
 
-        <button type="submit" className="btn btn-primary btn-block mb-4">
+        <button type="submit" className="btn btn-primary btn-block mb-4 mt-3">
           Login
           {error ? (
-            <span className="error">Login yoki Parol noto'g'ri !</span>
+            <span className="error" b>
+              Login yoki Parol noto'g'ri !
+            </span>
           ) : null}
         </button>
 
@@ -104,6 +98,12 @@ export default function Login() {
 
 const StyledLogin = styled.div`
   padding-top: 50px;
+
+  a {
+    :focus {
+      outline: none;
+    }
+  }
 
   form {
     width: 400px;

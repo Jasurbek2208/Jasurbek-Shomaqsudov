@@ -161,6 +161,7 @@ export default function Home() {
             )
           )
         );
+    setCurrFilDate(filteredData);
   }
 
   // FILTER
