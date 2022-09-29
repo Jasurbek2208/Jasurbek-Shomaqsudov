@@ -411,16 +411,16 @@ export default function Home() {
           </h1>
           <div className="skills-blok">
             <div className="left">
-              <p>HTML 5</p>
-              <p>CSS 3</p>
-              <p>SCSS(SASS)</p>
-              <p>BOOTSTRAP 5</p>
+              <p>HTML</p>
+              <p>CSS</p>
+              <p>Sass</p>
+              <p>Bootstrap</p>
               <p>Material UI</p>
             </div>
             <div className="right">
               <p>JavaScript</p>
               <p>TypeScript</p>
-              <p>React.JS</p>
+              <p>React</p>
               <p>Firebase</p>
               <p>C++</p>
             </div>
