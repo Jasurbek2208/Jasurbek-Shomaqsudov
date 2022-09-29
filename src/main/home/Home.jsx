@@ -25,6 +25,7 @@ export default function Home() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [likeLoading, setLikeLoading] = useState(false);
+  const [curUserAllLikes, setCurUserAllLikes] = useState("");
 
   // GET DATA
   async function getData(what) {
@@ -98,6 +99,7 @@ export default function Home() {
         ? Number(--num)
         : Number(num);
       await setDoc(docRef, upDateData);
+      dbCheckLike(divId);
       getData(false);
     } catch (e) {
       console.error("Error adding document: ", e);
@@ -124,7 +126,7 @@ export default function Home() {
     }
   }
 
-  function checkDataId(id) {
+  async function checkDataId(id) {
     if (!checkedDataWatcher.includes(id)) {
       setCheckedDataWatcher((p) => [...p, id]);
     } else {
@@ -132,6 +134,34 @@ export default function Home() {
         checkedDataWatcher.filter((i) => (i !== id ? true : false))
       );
     }
+  }
+
+  async function dbCheckLike(currPostId) {
+    let currUserId = "";
+    let currUserDate = "";
+    let currUserLikedId = "";
+    let aa = [];
+    const querySnapshot = await getDocs(collection(db, "users"));
+    querySnapshot.forEach((doc) => {
+      currUserId = doc?.id;
+      currUserDate = doc._document?.data?.value?.mapValue?.fields;
+      currUserLikedId = currUserDate?.liked?.stringValue;
+
+      aa = currUserLikedId.split(" ");
+      aa.includes(currPostId)
+        ? (aa = aa.filter((i) => (i !== currPostId ? true : false)))
+        : aa.push(currPostId);
+    });
+
+    setCurUserAllLikes(aa.join(" "));
+
+    await setDoc(doc(db, "users", currUserId), {
+      email: currUserDate?.email?.stringValue,
+      password: currUserDate?.password?.stringValue,
+      id: currUserDate?.id?.stringValue,
+      uid: currUserDate?.uid?.stringValue,
+      liked: aa.join(" "),
+    });
   }
 
   // SORT
@@ -217,8 +247,27 @@ export default function Home() {
     });
   }
 
+  async function getAllLikes() {
+    try {
+      const querySnapshot = await getDocs(collection(db, "users"));
+      querySnapshot.forEach((doc) => {
+        if (
+          doc._document?.data?.value?.mapValue?.fields?.uid?.stringValue ===
+          localStorage.getItem("$U$I$D$")
+        ) {
+          setCurUserAllLikes(
+            doc._document?.data?.value?.mapValue?.fields?.liked?.stringValue
+          );
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   useEffect(() => {
     getData(true);
+    getAllLikes();
   }, []);
 
   useEffect(() => {
@@ -548,7 +597,14 @@ export default function Home() {
                                   e
                                 );
                             }}
-                            className="icon icon-like fa-regular fa-thumbs-up"
+                            className={
+                              (curUserAllLikes.includes(
+                                i?.data?.value?.mapValue?.fields?.id
+                                  ?.stringValue
+                              )
+                                ? " fa-solid "
+                                : "fa-regular ") + "icon icon-like fa-thumbs-up"
+                            }
                           ></i>
                         </div>
                       </div>

@@ -21,11 +21,12 @@ export default function Router() {
     const querySnapshot = await getDocs(collection(db, "admin"));
     querySnapshot.forEach((doc) => {
       if (
-        doc._firestore._authCredentials.auth.auth.currentUser.accessToken ===
-        token
+        doc?._firestore?._authCredentials?.auth?.auth?.currentUser
+          ?.accessToken === token
       ) {
         if (
-          doc?._firestore._authCredentials.auth.auth.currentUser.uid === doc?.id
+          doc?._firestore?._authCredentials?.auth?.auth?.currentUser?.uid ===
+          doc?.id
         ) {
           setIsAdmin(true);
         }

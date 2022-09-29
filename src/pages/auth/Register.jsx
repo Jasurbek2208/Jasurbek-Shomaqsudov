@@ -1,12 +1,16 @@
 import React, { useContext, useState } from "react";
-import { useForm } from "react-hook-form";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
-import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
-import { auth } from "../../firebase";
+import { useForm } from "react-hook-form";
+import styled from "styled-components";
+
+// Firebase
+import { addDoc, collection } from "firebase/firestore";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth, db } from "../../firebase";
+import { v4 } from "uuid";
+
+// Context
 import { MyContext } from "../../context/Context";
-import { GoogleAuthProvider } from "firebase/auth";
-import Button from "../../components/button/Button";
 
 export default function Login() {
   const { setIsAuth } = useContext(MyContext);
@@ -45,18 +49,33 @@ export default function Login() {
   }
 
   async function registerUser({ email, password }) {
-    console.log(email, password);
     await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
         setUser(user);
         setIsAuth(true);
+        localStorage.setItem("$U$I$D$", user?.uid);
         localStorage.setItem("$ISAUTH$", "true");
         localStorage.setItem("$T$O$K$E$N$", user?.accessToken);
+        addUserDb(email, password, user?.uid);
       })
       .catch((error) => {
         console.log(error);
       });
+  }
+
+  async function addUserDb(email, password, uid) {
+    try {
+      await addDoc(collection(db, "users"), {
+        email,
+        password,
+        liked: "",
+        id: v4(),
+        uid,
+      });
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   return (
@@ -113,11 +132,11 @@ export default function Login() {
 const StyledLogin = styled.div`
   padding-top: 50px;
 
-a {
-  :focus {
-    outline: none;
+  a {
+    :focus {
+      outline: none;
+    }
   }
-}
 
   form {
     width: 400px;

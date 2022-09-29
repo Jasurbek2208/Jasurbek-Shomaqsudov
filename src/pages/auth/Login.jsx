@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../firebase";
 import { MyContext } from "../../context/Context";
+import { toast } from "react-toastify";
 
 export default function Login() {
   const { setIsAuth } = useContext(MyContext);
@@ -31,11 +32,11 @@ export default function Login() {
       );
       setUser(currUser);
       setIsAuth(true);
+      localStorage.setItem("$U$I$D$", currUser?.uid);
       localStorage.setItem("$ISAUTH$", "true");
       localStorage.setItem("$T$O$K$E$N$", currUser?.accessToken);
       navigate("home");
     } catch (error) {
-      console.log(error);
       setError(true);
     } finally {
       setLoading(false);
