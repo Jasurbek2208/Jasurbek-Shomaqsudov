@@ -13,7 +13,7 @@ import { v4 } from "uuid";
 import { MyContext } from "../../context/Context";
 
 export default function Login() {
-  const { setIsAuth } = useContext(MyContext);
+  const { setIsAuth, setLogging } = useContext(MyContext);
   const {
     register,
     handleSubmit,
@@ -75,6 +75,8 @@ export default function Login() {
       });
     } catch (error) {
       console.log(error);
+    } finally {
+      setLogging(false);
     }
   }
 

@@ -18,9 +18,10 @@ import MyInput from "../../components/input/MyInput";
 
 //
 import myRezume from "../../assets/pdf/ShomaqsudovJasurbekResume.pdf";
+import LoginAlert from "../../components/loginAlert/LoginAlert";
 
 export default function Home() {
-  const { devMode, devEditMode, setDevEditMode, currentLang } =
+  const { isAuth, devMode, devEditMode, setDevEditMode, currentLang, logging, setLogging } =
     useContext(MyContext);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -47,8 +48,28 @@ export default function Home() {
     }
   }
 
+  // GET Current User's all likes id
+  async function getAllLikes() {
+    try {
+      const querySnapshot = await getDocs(collection(db, "users"));
+      querySnapshot.forEach((doc) => {
+        if (
+          doc._document?.data?.value?.mapValue?.fields?.uid?.stringValue ===
+          localStorage.getItem("$U$I$D$")
+        ) {
+          setCurUserAllLikes(
+            doc._document?.data?.value?.mapValue?.fields?.liked?.stringValue
+          );
+        }
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   // CLICK LIKE
   async function clickForLike(divId, e) {
+    await getAllLikes();
     setLikeLoading(true);
     const loadLikeId = document.getElementById(divId);
     loadLikeId.innerHTML = `<div class="spinner-border spinner-border-sm" role="status"></div>`;
@@ -93,13 +114,11 @@ export default function Home() {
         });
       });
       let num = upDateData.like;
-      upDateData.like = currentLike
-        ? Number(++num)
-        : num !== 0
-        ? Number(--num)
-        : Number(num);
-      await setDoc(docRef, upDateData);
+      curUserAllLikes.includes(divId)
+        ? (upDateData.like = Number(--num))
+        : (upDateData.like = Number(++num));
       dbCheckLike(divId);
+      await setDoc(docRef, upDateData);
       getData(false);
     } catch (e) {
       console.error("Error adding document: ", e);
@@ -245,24 +264,6 @@ export default function Home() {
         alink.click();
       });
     });
-  }
-
-  async function getAllLikes() {
-    try {
-      const querySnapshot = await getDocs(collection(db, "users"));
-      querySnapshot.forEach((doc) => {
-        if (
-          doc._document?.data?.value?.mapValue?.fields?.uid?.stringValue ===
-          localStorage.getItem("$U$I$D$")
-        ) {
-          setCurUserAllLikes(
-            doc._document?.data?.value?.mapValue?.fields?.liked?.stringValue
-          );
-        }
-      });
-    } catch (error) {
-      console.log(error);
-    }
   }
 
   useEffect(() => {
@@ -503,6 +504,7 @@ export default function Home() {
             />
           </div>
           <main className="my-portfolios">
+            {logging ? <LoginAlert /> : null}
             {loading ? (
               <Loading winLoad={true} />
             ) : filteredData.length === 0 ? (
@@ -590,12 +592,13 @@ export default function Home() {
                               i?.data?.value?.mapValue?.fields?.id?.stringValue
                             }
                             onClick={(e) => {
-                              if (!likeLoading)
-                                clickForLike(
-                                  i?.data?.value?.mapValue?.fields?.id
-                                    ?.stringValue,
-                                  e
-                                );
+                              !likeLoading && isAuth
+                                ? clickForLike(
+                                    i?.data?.value?.mapValue?.fields?.id
+                                      ?.stringValue,
+                                    e
+                                  )
+                                : setLogging(true);
                             }}
                             className={
                               (curUserAllLikes.includes(

@@ -21,6 +21,7 @@ export default function MainNavbar() {
   function LogOut() {
     localStorage.removeItem("$ISAUTH$");
     localStorage.removeItem("$T$O$K$E$N$");
+    localStorage.removeItem("$U$I$D$");
     setIsAuth(false);
     setIsAdmin(false);
     CloseNav();

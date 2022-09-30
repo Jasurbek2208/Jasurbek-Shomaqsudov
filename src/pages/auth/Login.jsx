@@ -8,7 +8,7 @@ import { MyContext } from "../../context/Context";
 import { toast } from "react-toastify";
 
 export default function Login() {
-  const { setIsAuth } = useContext(MyContext);
+  const { setIsAuth, setLogging } = useContext(MyContext);
   const {
     register,
     handleSubmit,
@@ -41,6 +41,7 @@ export default function Login() {
     } finally {
       setLoading(false);
       setError(false);
+      setLogging(false);
     }
   }
 
