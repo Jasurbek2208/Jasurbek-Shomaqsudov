@@ -34,6 +34,7 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
   const [likeLoading, setLikeLoading] = useState(false);
   const [curUserAllLikes, setCurUserAllLikes] = useState("");
+  const [disblLike, setDisblLike] = useState(false);
 
   // GET DATA
   async function getData(what) {
@@ -76,6 +77,7 @@ export default function Home() {
 
   // CLICK LIKE
   async function clickForLike(divId, e) {
+    setDisblLike(true);
     await getAllLikes();
     setLikeLoading(true);
     const loadLikeId = document.getElementById(divId);
@@ -131,6 +133,7 @@ export default function Home() {
       console.error("Error adding document: ", e);
     } finally {
       setLikeLoading(false);
+      setDisblLike(false);
     }
   }
 
@@ -599,14 +602,16 @@ export default function Home() {
                               i?.data?.value?.mapValue?.fields?.id?.stringValue
                             }
                             onClick={(e) => {
-                              if (!likeLoading) {
-                                isAuth
-                                  ? clickForLike(
-                                      i?.data?.value?.mapValue?.fields?.id
-                                        ?.stringValue,
-                                      e
-                                    )
-                                  : setLogging(true);
+                              if (!disblLike) {
+                                if (!likeLoading) {
+                                  isAuth
+                                    ? clickForLike(
+                                        i?.data?.value?.mapValue?.fields?.id
+                                          ?.stringValue,
+                                        e
+                                      )
+                                    : setLogging(true);
+                                }
                               }
                             }}
                             className={
@@ -614,8 +619,8 @@ export default function Home() {
                                 i?.data?.value?.mapValue?.fields?.id
                                   ?.stringValue
                               )
-                                ? " fa-solid "
-                                : "fa-regular ") + "icon icon-like fa-thumbs-up"
+                                ? "fa-solid"
+                                : "fa-regular") + " icon icon-like fa-thumbs-up"
                             }
                           ></i>
                         </div>
