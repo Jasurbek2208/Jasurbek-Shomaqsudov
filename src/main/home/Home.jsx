@@ -21,8 +21,15 @@ import myRezume from "../../assets/pdf/ShomaqsudovJasurbekResume.pdf";
 import LoginAlert from "../../components/loginAlert/LoginAlert";
 
 export default function Home() {
-  const { isAuth, devMode, devEditMode, setDevEditMode, currentLang, logging, setLogging } =
-    useContext(MyContext);
+  const {
+    isAuth,
+    devMode,
+    devEditMode,
+    setDevEditMode,
+    currentLang,
+    logging,
+    setLogging,
+  } = useContext(MyContext);
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [likeLoading, setLikeLoading] = useState(false);
@@ -592,13 +599,15 @@ export default function Home() {
                               i?.data?.value?.mapValue?.fields?.id?.stringValue
                             }
                             onClick={(e) => {
-                              !likeLoading && isAuth
-                                ? clickForLike(
-                                    i?.data?.value?.mapValue?.fields?.id
-                                      ?.stringValue,
-                                    e
-                                  )
-                                : setLogging(true);
+                              if (!likeLoading) {
+                                isAuth
+                                  ? clickForLike(
+                                      i?.data?.value?.mapValue?.fields?.id
+                                        ?.stringValue,
+                                      e
+                                    )
+                                  : setLogging(true);
+                              }
                             }}
                             className={
                               (curUserAllLikes.includes(
