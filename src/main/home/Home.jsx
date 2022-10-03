@@ -407,7 +407,13 @@ export default function Home() {
           <div className="rezume-wrapper">
             <Button
               type="button"
-              content="Download Rezume"
+              content={
+                currentLang === "Uz"
+                  ? "Rezumeni Yuklash"
+                  : currentLang === "Ru"
+                  ? "Скачать Резуме"
+                  : "Download Rezume"
+              }
               onClick={downloadRezume}
               className="download-rezume"
             />
