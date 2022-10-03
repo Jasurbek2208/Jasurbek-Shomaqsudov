@@ -172,9 +172,14 @@ export default function Home() {
     let aa = [];
     const querySnapshot = await getDocs(collection(db, "users"));
     querySnapshot.forEach((doc) => {
-      currUserId = doc?.id;
-      currUserDate = doc._document?.data?.value?.mapValue?.fields;
-      currUserLikedId = currUserDate?.liked?.stringValue;
+      if (
+        doc._document?.data?.value?.mapValue?.fields?.uid?.stringValue ===
+        localStorage.getItem("$U$I$D$")
+      ) {
+        currUserId = doc?.id;
+        currUserDate = doc._document?.data?.value?.mapValue?.fields;
+        currUserLikedId = currUserDate?.liked?.stringValue;
+      }
 
       aa = currUserLikedId.split(" ");
       aa.includes(currPostId)
@@ -277,8 +282,8 @@ export default function Home() {
   }
 
   useEffect(() => {
-    getData(true);
     getAllLikes();
+    getData(true);
   }, []);
 
   useEffect(() => {
