@@ -49,6 +49,7 @@ export default function Home() {
       });
       setData(list);
       setFilteredData(list);
+      setCurrFilDate(list);
     } catch (error) {
       console.log(error);
     } finally {
