@@ -19,5 +19,6 @@ const StyledInput = styled.input`
 
   &:focus {
     outline: none;
+    box-shadow: 8px 6px 8px 2px #ccc;
   }
 `;

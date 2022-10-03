@@ -365,6 +365,15 @@ const StyledNavbar = styled.nav`
                 width: 100%;
               }
             }
+            
+            &:focus {
+              outline: none;
+              color: #fff;
+
+              span {
+                width: 100%;
+              }
+            }
 
             &.On {
               color: #fff;

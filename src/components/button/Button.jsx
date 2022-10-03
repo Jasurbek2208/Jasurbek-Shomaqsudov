@@ -26,6 +26,10 @@ const StyledButton = styled.a`
     background-color: #fff0;
     font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
     border: none;
+
+    &:focus {
+      outline: none;
+    }
   }
 
   &:hover {
@@ -70,19 +74,38 @@ const StyledButton = styled.a`
     }
 
     &:focus {
+      outline: none;
       box-shadow: 8px 6px 8px 2px #ccc;
-      button {
-        color: #fff;
-        outline: none;
-      }
+    }
+  }
+
+  &:focus {
+    outline: none;
+    background-color: #fcfcfc;
+    transform: scale(110%);
+    button {
+      color: #1381ff;
+      outline: none;
     }
   }
 
   &.download-rezume {
-    border: 1px solid #1b1b1b;
+    border: none;
+    padding: 0px;
+    transition: 0.3s;
 
     button {
+      cursor: pointer;
+      padding: 12px 20px;
+      border: 1px solid #1b1b1b;
+      transition: 0.3s;
       color: #1b1b1b;
+
+      &:focus {
+        transform: scale(103%) !important;
+        box-shadow: 8px 6px 8px 2px #ccc;
+        background-color: #fff;
+      }
     }
   }
 `;

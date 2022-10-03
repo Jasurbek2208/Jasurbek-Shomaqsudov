@@ -33,6 +33,7 @@ const StyledSelect = styled.select`
   width: 240px;
 
   &:focus {
+    box-shadow: 8px 6px 8px 2px #ccc;
     outline: none;
   }
 
