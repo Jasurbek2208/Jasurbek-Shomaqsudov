@@ -728,8 +728,13 @@ const StyledHome = styled.div`
         max-width: 720px;
         padding: 40px;
         border: 1px solid #1b1b1b;
-        box-shadow: 6px 6px 10px 2px #9c9c9cc8;
         background-color: #fff0;
+        transition: background-color 1s, box-shadow 500ms;
+
+        &:hover {
+          background-color: #fff;
+          box-shadow: 6px 6px 10px 2px #9c9c9cc8;
+        }
 
         p {
           font-family: "Poppins";
@@ -781,7 +786,7 @@ const StyledHome = styled.div`
             padding: 8px 10px;
             border-radius: 20px;
             background-color: #fff0;
-            transition: 0.2s;
+            transition: 0.4s;
 
             &:hover {
               color: #fff;

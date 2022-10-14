@@ -15,7 +15,7 @@ const StyledButton = styled.a`
   cursor: pointer;
   padding: 12px 20px;
   border: 1px solid #fff;
-  transition: 0.3s;
+  transition: .4s;
 
   button {
     width: 100%;
@@ -63,7 +63,7 @@ const StyledButton = styled.a`
     border-radius: 10px;
     color: #fff;
     font-size: 16px;
-    transition: 0.3s;
+    transition: 0.4s;
 
     &:hover {
       transform: scale(100%);
@@ -92,7 +92,7 @@ const StyledButton = styled.a`
   &.download-rezume {
     border: none;
     padding: 0px;
-    transition: 0.3s;
+    transition: 0.4s;
 
     button {
       cursor: pointer;
