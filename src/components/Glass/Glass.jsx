@@ -1,18 +1,10 @@
-import React, { useState } from "react";
-import styled, { css } from "styled-components";
+import React from "react";
+import styled from "styled-components";
 
-export default function Glass({ children, aboutPage }) {
-  const [scroll, setScroll] = useState(" Off");
-  
-  function scrolled() {
-    window.scrollY > 300 ? setScroll(" On") : setScroll(" Off");
-  }
-
-  document.body.setAttribute("onScroll", '() => scrolled()');
-
+export default function Glass({ children }) {
   return (
     <StyledGlass>
-      <div className={"img-glass" + (aboutPage ? scroll : "")}>
+      <div className="img-glass">
         <div className="img__wrapper">{children}</div>
       </div>
     </StyledGlass>
@@ -36,16 +28,16 @@ const StyledGlass = styled.div`
     left: 0px;
     right: 0px;
     border: 1px solid #3b3b3b19;
-    background: linear-gradient(60deg, #3b3b3b19, #8f8f8fb3, #3b3b3b19);
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     transform: rotate3d(130%);
     animation-name: glassAnimate;
     animation-duration: 3.5s;
 
-    ${(scrollY) => {
-      if (scrollY === 120) {
-        console.log(scrollY);
-      }
-    }}
     @keyframes glassAnimate {
       0% {
         width: 0%;
@@ -60,7 +52,12 @@ const StyledGlass = styled.div`
       100% {
         width: 100%;
         height: 450px;
-        border: 1px solid #3b3b3b19;
+        background: rgba(255, 255, 255, 0.2);
+        border-radius: 16px;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        backdrop-filter: blur(5px);
+        -webkit-backdrop-filter: blur(5px);
+        border: 1px solid rgba(255, 255, 255, 0.3);
         transform: rotate3d(130deg);
       }
     }
@@ -76,10 +73,4 @@ const StyledGlass = styled.div`
       }
     }
   }
-
-  ${({ aboutPage }) => {
-    if (aboutPage) {
-      return css``;
-    }
-  }}
 `;

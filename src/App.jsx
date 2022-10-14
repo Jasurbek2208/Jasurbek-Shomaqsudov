@@ -13,11 +13,11 @@ import Context from "./context/Context";
 export default function App() {
   return (
     <Context>
-        <ToastContainer />
-        <BrowserRouter>
-          <GlobalStyle />
-          <Router />
-        </BrowserRouter>
-      </Context>
+      <ToastContainer />
+      <BrowserRouter>
+        <GlobalStyle />
+        <Router />
+      </BrowserRouter>
+    </Context>
   );
 }

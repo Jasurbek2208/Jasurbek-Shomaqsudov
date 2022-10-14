@@ -73,7 +73,7 @@ const StyledFooter = styled.footer`
         a {
           text-decoration: none;
           border-bottom: 0px solid #1381ff;
-          transition: border .1s;
+          transition: .1s;
 
           &:focus {
             outline: none;

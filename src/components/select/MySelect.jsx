@@ -31,9 +31,10 @@ const StyledSelect = styled.select`
   border: 1px solid #1b1b1b;
   background-color: transparent;
   width: 240px;
+  transition: .3s;
 
   &:focus {
-    box-shadow: 8px 6px 8px 2px #ccc;
+    box-shadow: 4px 2px 10px 0px #4e4e4e;
     outline: none;
   }
 

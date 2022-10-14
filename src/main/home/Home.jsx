@@ -302,8 +302,8 @@ export default function Home() {
                 {currentLang === "Uz"
                   ? "Shomaqsudov Jasurbek"
                   : currentLang === "Ru"
-                  ? "Жасурбек Шомаксудов"
-                  : "Shomakudov Jasurbek"}
+                  ? "Шомаксудов Жасурбек"
+                  : "Shomaksudov Jasurbek"}
               </h1>
               <h3>
                 {currentLang === "Uz"
@@ -315,12 +315,11 @@ export default function Home() {
               <p>
                 {currentLang === "Uz"
                   ? `
-                  Mening ismim Jasurbek. Va men FrontEend Dasturchiman. Men
+                  Mening ismim Jasurbek va men Frontend Dasturchiman. Men
                   ishimni endigina boshladim va hozirda tajriba orttiryapman. Nega
-                  meni tanlashing kerak? Ushbu saytdagi ma'lumotlarni o'qib, bu
-                  haqda ko'proq bilib olishingiz mumkin.`
+                  meni tanlashingiz kerak? Ushbu saytni ko'rib chiqib, shu savolga javob olishingiz mumkin.`
                   : currentLang === "Ru"
-                  ? `Меня зовут Жасурбек. И я Front-End Разработчик. Я только начал
+                  ? `Меня зовут Жасурбек и Я Front-End Разработчик. Я только начал
                   свою работу и в настоящее время набираюсь опыта. Почему вы
                   должны выбрать Меня? Подробнее об этом вы узнаете, прочитав
                   информацию на этом сайте.`
@@ -527,9 +526,7 @@ export default function Home() {
           </div>
           <main className="my-portfolios">
             {logging ? <LoginAlert /> : null}
-            {loading ? (
-              <Loading winLoad={true} />
-            ) : filteredData.length === 0 ? (
+            {filteredData.length === 0 ? (
               <h1
                 style={{
                   fontSize: "22px",
@@ -714,7 +711,7 @@ const StyledHome = styled.div`
 
   /* ABOUT SECTION STYLE */
   .about__wrapper {
-    padding: 130px 0 140px;
+    padding: 130px 0 100px;
     background-color: #ececec;
 
     .container {
@@ -741,7 +738,7 @@ const StyledHome = styled.div`
       }
 
       .rezume-wrapper {
-        margin-top: 120px;
+        margin-top: 80px;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -751,7 +748,7 @@ const StyledHome = styled.div`
 
   /* SKILLS WRAPPER */
   .skills__wrapper {
-    padding: 0px 0 50px;
+    padding: 0px;
     background-color: #ececec;
 
     .container {
@@ -847,17 +844,17 @@ const StyledHome = styled.div`
 
       .post-actions {
         margin-top: 20px;
-        padding: 18px 22px;
+        padding: 12px 18px;
         display: flex;
         align-items: flex-start;
         justify-content: space-around;
         gap: 30px;
-        row-gap: 40px;
+        row-gap: 20px;
         flex-wrap: wrap;
       }
 
       .my-portfolios {
-        margin-top: 50px;
+        margin-top: 30px;
         display: flex;
         align-items: center;
         justify-content: space-around;
@@ -925,7 +922,7 @@ const StyledHome = styled.div`
                 font-size: 15px;
                 text-decoration: none;
                 color: #9c9c9cc8;
-                transition: 0.1s;
+                transition: 0.3s ease-in-out;
 
                 &:hover {
                   color: blueviolet;
