@@ -729,9 +729,10 @@ const StyledHome = styled.div`
         padding: 40px;
         border: 1px solid #1b1b1b;
         background-color: #fff0;
-        transition: background-color 1s, box-shadow 500ms;
+        transition: background-color 1s, border-color 500ms, box-shadow 500ms;
 
         &:hover {
+          border: 1px solid #fff0;
           background-color: #fff;
           box-shadow: 6px 6px 10px 2px #9c9c9cc8;
         }
