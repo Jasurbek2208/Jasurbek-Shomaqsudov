@@ -1,4 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
+import styled from "styled-components";
+
+// Firebase
 import {
   collection,
   doc,
@@ -6,19 +9,21 @@ import {
   setDoc,
   deleteDoc,
 } from "firebase/firestore";
-import styled from "styled-components";
-import Button from "../../components/button/Button";
-import Glass from "../../components/Glass/Glass";
-import { db } from "../../firebase";
-import MainFooter from "../../components/mainFooter/MainFooter";
-import { MyContext } from "../../context/Context";
-import Loading from "../../components/loading/Loading";
-import MySelect from "../../components/select/MySelect";
-import MyInput from "../../components/input/MyInput";
+import { db } from "../../../firebase";
 
-//
-import myRezume from "../../assets/pdf/ShomaqsudovJasurbekResume.pdf";
-import LoginAlert from "../../components/loginAlert/LoginAlert";
+// Components
+import Glass from "../../../components/Glass/Glass";
+import Button from "../../../components/button/Button";
+import MyInput from "../../../components/input/MyInput";
+import MySelect from "../../../components/select/MySelect";
+import MainFooter from "../../../components/mainFooter/MainFooter";
+import LoginAlert from "../../../components/loginAlert/LoginAlert";
+
+// Context
+import { MyContext } from "../../../context/Context";
+
+// Resume
+import myRezume from "../../../assets/pdf/ShomaqsudovJasurbekResume.pdf";
 
 export default function Home() {
   const {

@@ -1,17 +1,21 @@
-import { collection, getDocs } from "firebase/firestore";
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
-import { MyContext } from "../context/Context";
+
+// Firebase
+import { collection, getDocs } from "firebase/firestore";
 import { db } from "../firebase";
 
 // Layouts
 import MainLayout from "../layouts/mainLayout/MainLayout";
 
-//
-import Home from "../main/home/Home";
-import AdminPage from "../pages/admin/AdminPage";
+// Components
 import Login from "../pages/auth/Login";
+import Home from "../pages/main/home/Home";
 import Register from "../pages/auth/Register";
+import AdminPage from "../pages/admin/AdminPage";
+
+// Context
+import { MyContext } from "../context/Context";
 
 export default function Router() {
   const { isAuth, isAdmin, setIsAdmin } = useContext(MyContext);
