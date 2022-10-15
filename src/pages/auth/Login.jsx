@@ -40,7 +40,6 @@ export default function Login() {
       setError(true);
     } finally {
       setLoading(false);
-      setError(false);
       setLogging(false);
     }
   }
@@ -61,6 +60,7 @@ export default function Login() {
             id="form2Example1"
             className={(error ? "myError " : "") + "form-control"}
             {...register("email", { required: true })}
+            onChange={() => setError(false)}
           />
           <label className="form-label" htmlFor="form2Example1">
             Email address
@@ -73,13 +73,20 @@ export default function Login() {
             id="form2Example2"
             className={(error ? "myError " : "") + "form-control"}
             {...register("password", { required: true })}
+            onChange={() => setError(false)}
           />
           <label className="form-label" htmlFor="form2Example2">
             Password
           </label>
         </div>
 
-        <button type="submit" className="btn btn-primary btn-block mb-4 mt-3">
+        <button
+          type="submit"
+          className={
+            (loading ? "disabled " : "") +
+            "btn btn-primary btn-block mb-4 mt-3 py-2"
+          }
+        >
           Login
           {error ? (
             <span className="error" b>
@@ -88,7 +95,7 @@ export default function Login() {
           ) : null}
         </button>
 
-        <div className="text-center">
+        <div className="text-center mt-3">
           <p>
             Not a member? <Link to="/register">Register</Link>
           </p>
@@ -135,9 +142,10 @@ const StyledLogin = styled.div`
     .error {
       position: absolute;
       left: 50%;
-      bottom: -22px;
+      bottom: -28px;
       transform: translateX(-50%);
-      font-size: 12px;
+      font-size: 13px;
+      width: max-content;
       color: red;
     }
   }

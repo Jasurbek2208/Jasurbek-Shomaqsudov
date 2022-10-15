@@ -11,6 +11,7 @@ import { v4 } from "uuid";
 
 // Context
 import { MyContext } from "../../context/Context";
+import Loading from "../../components/loading/Loading";
 
 export default function Login() {
   const { setIsAuth, setLogging } = useContext(MyContext);
@@ -24,31 +25,9 @@ export default function Login() {
   const [user, setUser] = useState(null);
   const navigate = useNavigate();
 
-  async function RegisterAuth(data) {
-    // setError(false);
-    // setLoading(true);
-    // let currUser = null;
-    // try {
-    //   await signInWithEmailAndPassword(auth, data.email, data.password).then(
-    //     (userCredential) => {
-    //       currUser = userCredential.user;
-    //     }
-    //   );
-    //   setError(false);
-    //   setUser(currUser);
-    //   setIsAuth(true);
-    //   localStorage.setItem("$ISAUTH$", "true");
-    //   localStorage.setItem("$T$O$K$E$N$", currUser?.accessToken);
-    //   navigate("home");
-    // } catch (error) {
-    //   console.log(error);
-    //   setError(true);
-    // } finally {
-    //   setLoading(false);
-    // }
-  }
-
   async function registerUser({ email, password }) {
+    setError(false);
+    setLoading(true);
     await createUserWithEmailAndPassword(auth, email, password)
       .then((userCredential) => {
         const user = userCredential.user;
@@ -60,7 +39,10 @@ export default function Login() {
         addUserDb(email, password, user?.uid);
       })
       .catch((error) => {
-        console.log(error);
+        setError(true);
+      })
+      .finally(() => {
+        setLoading(false);
       });
   }
 
@@ -96,6 +78,7 @@ export default function Login() {
             id="form2Example1"
             className={(error ? "myError " : "") + "form-control"}
             {...register("email", { required: true })}
+            onChange={() => setError(false)}
           />
           <label className="form-label" htmlFor="form2Example1">
             Email address
@@ -108,20 +91,29 @@ export default function Login() {
             id="form2Example2"
             className={(error ? "myError " : "") + "form-control"}
             {...register("password", { required: true })}
+            onChange={() => setError(false)}
           />
           <label className="form-label" htmlFor="form2Example2">
             Password
           </label>
         </div>
 
-        <button type="submit" className="btn btn-primary btn-block mb-4 mt-3">
+        <button
+          type="submit"
+          className={
+            (loading ? "disabled " : "") +
+            "btn btn-primary btn-block mb-4 mt-3 py-2"
+          }
+        >
           Register
           {error ? (
-            <span className="error">Email yoki Parol noto'g'ri !</span>
+            <span className="error">
+              Bu email allaqachon ro'yxatdan o'tib bo'lgan !
+            </span>
           ) : null}
         </button>
 
-        <div className="text-center">
+        <div className="text-center mt-3">
           <p>
             Registered? <Link to="/login">Login</Link>
           </p>
@@ -168,10 +160,11 @@ const StyledLogin = styled.div`
     .error {
       position: absolute;
       left: 50%;
-      bottom: -22px;
+      bottom: -28px;
       transform: translateX(-50%);
-      font-size: 12px;
+      font-size: 13px;
       color: red;
+      width: max-content;
     }
   }
 
