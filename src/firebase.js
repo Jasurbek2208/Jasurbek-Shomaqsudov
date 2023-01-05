@@ -1,7 +1,7 @@
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
+import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
+import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDEGmBXTzfY0dciLjKlLuLrO4bD1jP4Ik0",
@@ -9,7 +9,7 @@ const firebaseConfig = {
   projectId: "myportfolio-3f3dc",
   storageBucket: "myportfolio-3f3dc.appspot.com",
   messagingSenderId: "126458330665",
-  appId: "1:126458330665:web:601b66a25d1e12c046e638",
+  appId: "1:126458330665:web:601b66a25d1e12c046e638"
 };
 
 

@@ -8,11 +8,12 @@ import { db } from "../firebase";
 // Layouts
 import MainLayout from "../layouts/mainLayout/MainLayout";
 
-// Components
+// Pages
 import Login from "../pages/auth/Login";
 import Home from "../pages/main/home/Home";
 import Register from "../pages/auth/Register";
 import AdminPage from "../pages/admin/AdminPage";
+import PortfolioPosts from "../pages/main/portfolioPosts/PortfolioPosts";
 
 // Context
 import { MyContext } from "../context/Context";
@@ -46,6 +47,7 @@ export default function Router() {
     <Routes>
       <Route element={<MainLayout />}>
         <Route path="home" element={<Home />} />
+        <Route path="portfolio-posts" element={<PortfolioPosts />} />
         {isAdmin ? <Route path="adminPage" element={<AdminPage />} /> : null}
         <Route path="*" element={<Navigate to={"/home"} />} />
       </Route>

@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import styled from "styled-components";
 
 // Firebase
@@ -40,6 +41,7 @@ export default function Home() {
   const [likeLoading, setLikeLoading] = useState(false);
   const [curUserAllLikes, setCurUserAllLikes] = useState("");
   const [disblLike, setDisblLike] = useState(false);
+  const [randomNumbers, setRandomNumbers] = useState([]);
 
   // GET DATA
   async function getData(what) {
@@ -55,6 +57,7 @@ export default function Home() {
       setData(list);
       setFilteredData(list);
       setCurrFilDate(list);
+      setRandomNumbers(randomNumberGenerate(0, list.length));
     } catch (error) {
       console.log(error);
     } finally {
@@ -287,6 +290,15 @@ export default function Home() {
     });
   }
 
+  // Get Random Number
+  function randomNumberGenerate(min, max) {
+    const numsArr = [];
+    for (let i = 0; i < 3; i++) {
+      numsArr.push(Math.floor(Math.random() * (max - min + 1) + min));
+    }
+    return numsArr;
+  }
+
   useEffect(() => {
     getAllLikes();
     getData(true);
@@ -438,42 +450,24 @@ export default function Home() {
           </h1>
           <div className="skills-blok">
             <div className="left">
-              <p>HTML</p>
-              <p>CSS</p>
+              <p>HTML5</p>
+              <p>CSS3</p>
               <p>Sass</p>
-              <p>Bootstrap</p>
+              <p>Tailwind</p>
+              <p>Bootstrap5</p>
               <p>Material UI</p>
             </div>
             <div className="right">
               <p>JavaScript</p>
               <p>TypeScript</p>
               <p>React</p>
+              <p>Astro</p>
               <p>Firebase</p>
               <p>C++</p>
             </div>
           </div>
         </div>
       </section>
-
-      {/* DELETE BTN */}
-      <div
-        className={
-          (checkedDataWatcher.length > 0 ? "On " : "") + "deleteFixedBtn"
-        }
-        onClick={deleteDocId}
-      >
-        <p>Delete item</p>
-      </div>
-
-      <div
-        className={
-          (checkedDataWatcher.length === 1 ? "On " : "") +
-          "deleteFixedBtn CurrEdit"
-        }
-        onClick={() => console.log("Yeah")}
-      >
-        <p>Edit Current Portfolio</p>
-      </div>
 
       {/* PORTFOLIO WRAPPER */}
       <section className="portfolio__wrapper" id="myPortfolio">
@@ -493,42 +487,11 @@ export default function Home() {
               </div>
             ) : null}
           </h1>
-          <div className="post-actions">
-            {/* SORT */}
-            <MySelect
-              options={[
-                { value: "title", name: "title" },
-                { value: "technologies", name: "technologies" },
-                { value: "likeUp", name: "popular Up" },
-                { value: "likeDown", name: "popular Down" },
-              ]}
-              defaultValue="sort by"
-              value={sortValue}
-              onChange={sortPosts}
-            />
-            {/* FILTER */}
-            <MySelect
-              options={[
-                { value: "All", name: "All" },
-                { value: "HTML 5", name: "HTML 5" },
-                { value: "CSS 3", name: "CSS 3" },
-                { value: "SASS", name: "Sass" },
-                { value: "JavaScript", name: "JavaScript" },
-                { value: "React", name: "React" },
-                { value: "Firebase", name: "Firebase" },
-                { value: "Bootstrap", name: "Bootstrap" },
-                { value: "Material UI", name: "Material UI" },
-              ]}
-              defaultValue="filter by"
-              value={filterValue}
-              onChange={filterPosts}
-            />
-            <MyInput
-              placeholder="Search posts by title..."
-              value={searchValue}
-              onChange={searchPosts}
-            />
-          </div>
+          <h5 className="portfolio-link">
+            <Link to="/portfolio-posts">
+              See more for my portfolios &#x2192;
+            </Link>
+          </h5>
           <main className="my-portfolios">
             {logging ? <LoginAlert /> : null}
             {filteredData.length === 0 ? (
@@ -543,106 +506,115 @@ export default function Home() {
                 Portolio not found !
               </h1>
             ) : (
-              filteredData?.map((i) => {
-                return (
-                  <div
-                    key={i?.data?.value?.mapValue?.fields?.title?.stringValue}
-                    className="blog_wrapper"
-                  >
-                    <div className="top">
-                      <img
-                        src={i?.data?.value?.mapValue?.fields?.img?.stringValue}
-                        alt={
-                          i?.data?.value?.mapValue?.fields?.title?.stringValue +
-                          ".jpg"
-                        }
-                      />
-                    </div>
-                    <div className="bottom">
-                      {devEditMode ? (
-                        <input
-                          className="form-check-input"
-                          type="checkbox"
-                          checked={
-                            checkedDataWatcher.includes(
-                              i?.key?.path?.segments[6]
-                            )
-                              ? true
-                              : false
+              <>
+                {filteredData?.map((i, idx) => {
+                  if (!randomNumbers.includes(idx)) return;
+                  return (
+                    <div
+                      key={i?.data?.value?.mapValue?.fields?.title?.stringValue}
+                      className="blog_wrapper"
+                    >
+                      <div className="top">
+                        <img
+                          src={
+                            i?.data?.value?.mapValue?.fields?.img?.stringValue
                           }
-                          onChange={() =>
-                            checkDataId(i?.key?.path?.segments[6])
+                          alt={
+                            i?.data?.value?.mapValue?.fields?.title
+                              ?.stringValue + ".jpg"
                           }
-                          id="flexCheckDefault"
                         />
-                      ) : null}
-                      <h2>
-                        {i?.data?.value?.mapValue?.fields?.title?.stringValue}
-                      </h2>
-                      <h5>
-                        {
-                          i?.data?.value?.mapValue?.fields?.technologies
-                            ?.stringValue
-                        }
-                      </h5>
-                      <p
-                        dangerouslySetInnerHTML={{
-                          __html:
-                            i?.data?.value?.mapValue?.fields?.description
-                              ?.stringValue,
-                        }}
-                      ></p>
-                      <div className="link">
-                        <a
-                          href={
-                            i?.data?.value?.mapValue?.fields?.link?.stringValue
+                      </div>
+                      <div className="bottom">
+                        {devEditMode ? (
+                          <input
+                            className="form-check-input"
+                            type="checkbox"
+                            checked={
+                              checkedDataWatcher.includes(
+                                i?.key?.path?.segments[6]
+                              )
+                                ? true
+                                : false
+                            }
+                            onChange={() =>
+                              checkDataId(i?.key?.path?.segments[6])
+                            }
+                            id="flexCheckDefault"
+                          />
+                        ) : null}
+                        <h2>
+                          {i?.data?.value?.mapValue?.fields?.title?.stringValue}
+                        </h2>
+                        <h5>
+                          {
+                            i?.data?.value?.mapValue?.fields?.technologies
+                              ?.stringValue
                           }
-                        >
-                          Link to Project
-                        </a>
-                        <div className="icon-wrapper">
-                          <span
-                            id={
-                              i?.data?.value?.mapValue?.fields?.id?.stringValue
+                        </h5>
+                        <p
+                          dangerouslySetInnerHTML={{
+                            __html:
+                              i?.data?.value?.mapValue?.fields?.description
+                                ?.stringValue,
+                          }}
+                        ></p>
+                        <div className="link">
+                          <a
+                            href={
+                              i?.data?.value?.mapValue?.fields?.link
+                                ?.stringValue
                             }
                           >
-                            {
-                              i?.data?.value?.mapValue?.fields?.like
-                                ?.integerValue
-                            }
-                          </span>
-                          <i
-                            id={
-                              i?.data?.value?.mapValue?.fields?.id?.stringValue
-                            }
-                            onClick={(e) => {
-                              if (!disblLike) {
-                                if (!likeLoading) {
-                                  isAuth
-                                    ? clickForLike(
-                                        i?.data?.value?.mapValue?.fields?.id
-                                          ?.stringValue,
-                                        e
-                                      )
-                                    : setLogging(true);
-                                }
-                              }
-                            }}
-                            className={
-                              (curUserAllLikes.includes(
+                            Link to Project
+                          </a>
+                          <div className="icon-wrapper">
+                            <span
+                              id={
                                 i?.data?.value?.mapValue?.fields?.id
                                   ?.stringValue
-                              )
-                                ? "fa-solid"
-                                : "fa-regular") + " icon icon-like fa-thumbs-up"
-                            }
-                          ></i>
+                              }
+                            >
+                              {
+                                i?.data?.value?.mapValue?.fields?.like
+                                  ?.integerValue
+                              }
+                            </span>
+                            <i
+                              id={
+                                i?.data?.value?.mapValue?.fields?.id
+                                  ?.stringValue
+                              }
+                              onClick={(e) => {
+                                if (!disblLike) {
+                                  if (!likeLoading) {
+                                    isAuth
+                                      ? clickForLike(
+                                          i?.data?.value?.mapValue?.fields?.id
+                                            ?.stringValue,
+                                          e
+                                        )
+                                      : setLogging(true);
+                                  }
+                                }
+                              }}
+                              className={
+                                (curUserAllLikes.includes(
+                                  i?.data?.value?.mapValue?.fields?.id
+                                    ?.stringValue
+                                )
+                                  ? "fa-solid"
+                                  : "fa-regular") +
+                                " icon icon-like fa-thumbs-up"
+                              }
+                            ></i>
+                          </div>
                         </div>
                       </div>
                     </div>
-                  </div>
-                );
-              })
+                  );
+                })}
+              </>
             )}
           </main>
         </div>
@@ -804,38 +776,6 @@ const StyledHome = styled.div`
     }
   }
 
-  /* deleteFixedBtn */
-  .deleteFixedBtn {
-    cursor: pointer;
-    padding-left: 10px;
-    position: fixed;
-    z-index: 1;
-    right: -1000px;
-    top: 25%;
-    width: 110px;
-    height: 50px;
-    background-color: #ececec;
-    border-radius: 10px;
-    box-shadow: 0px 3px 7px 1px #aaa;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    transition: 0.2s;
-
-    &.CurrEdit {
-      top: 40%;
-    }
-
-    &.On {
-      right: -10px;
-    }
-
-    p {
-      margin: 0;
-      font-size: 13px;
-    }
-  }
-
   /* PORTFOLIO WRAPPER */
   .portfolio__wrapper {
     padding: 130px 0px 200px;
@@ -851,6 +791,17 @@ const StyledHome = styled.div`
         font-weight: 800;
         font-size: 2rem;
         color: #1b1b1b;
+      }
+
+      .portfolio-link {
+        margin: 20px 0px 10px;
+        display: grid;
+        place-items: center;
+
+        a {
+          font-size: 1rem;
+          text-decoration: none;
+        }
       }
 
       .post-actions {
@@ -871,14 +822,12 @@ const StyledHome = styled.div`
         justify-content: space-around;
         flex-wrap: wrap;
         gap: 30px;
-        row-gap: 50px;
 
         .blog_wrapper {
           position: relative;
           width: 300px;
           height: 380px;
           border-radius: 12px;
-          /* border: 2px solid #000; */
           background-color: #fff;
           box-shadow: 0px 3px 8px 0px #ccc;
 

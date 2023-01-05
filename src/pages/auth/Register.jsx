@@ -11,7 +11,6 @@ import { v4 } from "uuid";
 
 // Context
 import { MyContext } from "../../context/Context";
-import Loading from "../../components/loading/Loading";
 
 export default function Login() {
   const { setIsAuth, setLogging } = useContext(MyContext);
