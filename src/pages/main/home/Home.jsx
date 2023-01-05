@@ -57,7 +57,7 @@ export default function Home() {
       setData(list);
       setFilteredData(list);
       setCurrFilDate(list);
-      setRandomNumbers(randomNumberGenerate(0, list.length));
+      setRandomNumbers(randomNumberGenerate(0, list.length - 1));
     } catch (error) {
       console.log(error);
     } finally {
@@ -293,8 +293,11 @@ export default function Home() {
   // Get Random Number
   function randomNumberGenerate(min, max) {
     const numsArr = [];
-    for (let i = 0; i < 3; i++) {
-      numsArr.push(Math.floor(Math.random() * (max - min + 1) + min));
+    for (let i = 0; numsArr.length < 3; i++) {
+      let currRandomNumber = Math.floor(Math.random() * (max - min + 1) + min);
+      if (!numsArr.includes(currRandomNumber)) {
+        numsArr.push(currRandomNumber);
+      }
     }
     return numsArr;
   }

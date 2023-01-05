@@ -129,10 +129,10 @@ export default function MainNavbar() {
                 </a>
               </li>
               <li>
-                <a
+                <Link
                   onClick={CloseNav}
-                  href={"home#myPortfolio"}
-                  className={location === "#myPortfolio" ? "On" : ""}
+                  to="/portfolio-posts"
+                  className={location === "#myPortfolio" || location === "/portfolio-posts" ? "On" : ""}
                 >
                   {currentLang === "Uz"
                     ? "Portfolio"
@@ -140,7 +140,7 @@ export default function MainNavbar() {
                     ? "Портфолио"
                     : "Portfolio"}
                   <span className="left"></span>
-                </a>
+                </Link>
               </li>
               <li>
                 <a
